@@ -2,7 +2,7 @@
 /* This file is part of a copyrighted work; it is distributed with NO WARRANTY.
  * See the file COPYRIGHT.html for more details.
  */
- 
+
 $_Query_lock_depth = 0;
 require_once("../classes/QueryAny.php");
 require_once("../classes/DbIter.php");
@@ -35,7 +35,7 @@ class Query {
     }
     return array($link, NULL);
   }
-  
+
   function act($sql) {
     $results = $this->_act($sql);
     if (!is_bool($results)) {
@@ -79,14 +79,14 @@ class Query {
     }
     return $r;
   }
-  
+
   /* This is not easily portable to many SQL DBMSs.  A better scheme
    * might be something like PEAR::DB's sequences.
    */
   function getInsertID() {
     return $this->_link->insertID();
   }
-  
+
   /* Locking functions
    *
    * Besides switching to InnoDB for transactions, I haven't been able to
@@ -171,14 +171,14 @@ class Query {
       if (strlen($fmt) < $p+2) {
         Fatal::internalError('Bad mkSQL() format string.');
       }
-      if ($fmt{$p+1} == '%') {
+      if ($fmt[$p+1] == '%') {
         $SQL .= "%";
       } else {
         if ($i >= $n) {
           Fatal::internalError('Not enough arguments given to mkSQL().');
         }
         $arg = func_get_arg($i++);
-        switch ($fmt{$p+1}) {
+        switch ($fmt[$p+1]) {
         case '!':
           /* very dangerous, but sometimes very useful -- be careful */
           $SQL .= $arg;
@@ -223,7 +223,7 @@ class Query {
     }
     return $SQL;
   }
-  
+
   function _ident($i) {
     # Because the MySQL manual is unclear on how to include a ` in a `-quoted
     # identifer, we just drop them.  The manual does not say whether backslash
@@ -237,7 +237,7 @@ class Query {
       return "0";
     }
   }
-  
+
   /* Everything below is just a compatibility interface
    * for the last few iterations of this design.  Don't use
    * it.  This will be removed as soon as I get time to
