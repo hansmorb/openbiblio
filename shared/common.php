@@ -2,7 +2,7 @@
 /* This file is part of a copyrighted work; it is distributed with NO WARRANTY.
  * See the file COPYRIGHT.html for more details.
  */
- 
+
   # Forcibly disable register_globals
   if (ini_get('register_globals')) {
     foreach ($_REQUEST as $k=>$v) {
@@ -15,7 +15,7 @@
       unset(${$k});
     }
   }
-  
+
   /****************************************************************************
    * Cover up for the magic_quotes disaster.
    * Modified from ryan@wonko.com.
@@ -36,7 +36,7 @@
     $_COOKIE = array_map("magicSlashes", $_COOKIE);
     $_REQUEST = array_map("magicSlashes", $_REQUEST);
   }
-  
+
   # FIXME - Until I get around to fixing all the notices...
   $phpver = explode('.', PHP_VERSION);
   if ($phpver[0]==4) {
@@ -46,7 +46,7 @@
   } else {
     error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_DEPRECATED);
   }
-  
+
   # Escaping shorthands
   function H($s) {
     if (defined('OBIB_CHARSET')) {
@@ -86,7 +86,7 @@
   function mkPostVars() {
     return _mkPostVars($_REQUEST, NULL);
   }
-  
+
   # Compatibility
   $phpver = explode('.', PHP_VERSION);
   if ($phpver[0]>=5 || ($phpver[0]==4 && $phpver[1]>=3)) {
@@ -100,14 +100,15 @@
       setlocale($a[0], $a[1]);
     }
   }
-
+ if ( defined('OBIB_CHARSET')) {
   # code character set in HTTP header if specified
-  if (OBIB_CHARSET != "") {
-    header('Content-Type: text/html; charset=' . H(OBIB_CHARSET));
-  }
+    if (OBIB_CHARSET != "") {
+      header('Content-Type: text/html; charset=' . H(OBIB_CHARSET));
+    }
   # code character set in HTTP header if specified
-  if (OBIB_CHARSET != "") {
-    header('Content-Type: text/html; charset=' . H(OBIB_CHARSET));
+    if (OBIB_CHARSET != "") {
+      header('Content-Type: text/html; charset=' . H(OBIB_CHARSET));
+    }
   }
 
   # login allows redirects for:
@@ -135,7 +136,7 @@
   require_once('../classes/NumberedIter.php');
   require_once('../classes/SliceIter.php');
   require_once('../classes/Nav.php');
-  
+
   if (!isset($doing_install) or !$doing_install) {
     require_once("../shared/read_settings.php");
 
