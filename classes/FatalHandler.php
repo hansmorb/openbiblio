@@ -55,7 +55,7 @@ class FatalHandler {
             foreach ($frame['args'] as $a) {
               array_push($args, var_export($a, true));
             }
-            echo H(implode($args, ', '));
+            echo H(implode(', ',$args));
           } else {
             echo '???';
           }
