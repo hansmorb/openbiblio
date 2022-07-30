@@ -21,6 +21,7 @@
   // 0.7: CircQuery uses PHP to determine current time, other scripts use MySQL
   $link = QueryAny::db();
   $my_date = implode($link->fetch_row($link->query('select sysdate();')));
+  date_default_timezone_set(MAIN_TIMEZONE);
   $php_date = date('Y-m-d H:i:s');
   if ($php_date != $my_date) {
 ?>
