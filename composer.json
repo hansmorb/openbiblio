@@ -1,0 +1,15 @@
+{
+    "name": "hansm/openbiblio",
+    "authors": [
+        {
+            "name": "HansMorb",
+            "email": "6433480+hansmorb@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "rector/rector": "^0.14.0"
+    }
+}
