@@ -7,10 +7,11 @@ What works:
 - Base setup (without test-data)
 - Login
 - Most basic screens
-
+- Most queries
+- Checking media in / out
+- Creating users
 What doesn't work:
-- Most querys
-- Pretty much everything
+- Some reports
 
 # Spin up development enviroment
 1. Clone the GitHub repository to a local folder
