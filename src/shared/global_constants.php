@@ -58,4 +58,6 @@ define("OBIB_LOCALE_ROOT","../locale");
 
 # Not fully implemented yet.
 define("DB_TABLENAME_PREFIX", "");
+const BARCODENMBR = "barcodeNmbr";
+
 ?>
