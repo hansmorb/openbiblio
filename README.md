@@ -10,8 +10,10 @@ What works:
 - Most queries
 - Checking media in / out
 - Creating users
+
 What doesn't work:
 - Some reports
+- Probably a lot more
 
 # Spin up development enviroment
 1. Clone the GitHub repository to a local folder
