@@ -7,7 +7,8 @@
         }
     ],
     "require": {
-        "php": ">=8.0"
+        "php": ">=8.0",
+        "ext-mysqli": "*"
     },
     "require-dev": {
         "rector/rector": "^0.18.0"
