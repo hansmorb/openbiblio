@@ -20,7 +20,7 @@ class BiblioHoldQuery extends Query {
   public $_loc;
 
   function __construct() {
-    $this->Query();
+    parent::__construct();
     $this->_loc = new Localize(OBIB_LOCALE,"classes");
   }
 

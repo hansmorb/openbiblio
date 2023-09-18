@@ -8,7 +8,7 @@ require_once("../classes/InstallQuery.php");
 class UpgradeQuery extends InstallQuery {
   function __construct() {
     # Call query constructor so database connection gets made
-    $this->Query();
+    parent::__construct();
   }
   function insertBiblioFields($tag, $subFieldCd, 
                               $fromTablePrfx, $toTablePrfx,  $colName){

@@ -28,7 +28,7 @@ class BiblioQuery extends Query {
   public $_fieldsInBiblio;
 
   function __construct() {
-    $this->Query();
+    parent::__construct();
     $this->_loc = new Localize(OBIB_LOCALE,"classes");
     $this->_fieldsInBiblio = ['100a' => 'author', '245a' => 'title', '245b' => 'title_remainder', '245c' => 'responsibility_stmt', '650a' => 'topic1', '650a1' => 'topic2', '650a2' => 'topic3', '650a3' => 'topic4', '650a4' => 'topic5'];
   }
