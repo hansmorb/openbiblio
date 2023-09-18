@@ -8,7 +8,7 @@ require_once("../classes/Query.php");
 
 class InstallQuery extends Query {
   /* Override constructor so the installer can test the database connection */
-  function InstallQuery() {
+  function __construct() {
     ;
   }
   function dropTable($tableName) {
@@ -35,9 +35,9 @@ class InstallQuery extends Query {
       $pattern = DB_TABLENAME_PREFIX.'%';
     }
     $sql = "show tables like '".$pattern."'";
-    $rows = $this->exec($sql, OBIB_NUM);
+    $rows = $this->exec($sql);
 
-    $tablenames = array();
+    $tablenames = [];
     foreach ($rows as $row) {
       $tablenames[] = $row[0];
     }
@@ -108,7 +108,7 @@ class InstallQuery extends Query {
     $fp = fopen($filename, "r");
     # show error if file could not be opened
     if ($fp == false) {
-      Fatal::error("Error reading file: ".H($filename));
+      (new Fatal())->error("Error reading file: ".H($filename));
     } else {
       $sqlStmt = "";
       while (!feof ($fp)) {

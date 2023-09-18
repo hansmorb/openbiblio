@@ -16,10 +16,10 @@ require_once("../classes/BiblioCopy.php");
  ******************************************************************************
  */
 class BiblioCopyQuery extends Query {
-  var $_rowCount = 0;
-  var $_loc;
+  public $_rowCount = 0;
+  public $_loc;
 
-  function BiblioCopyQuery() {
+  function __construct() {
     $this->Query();
     $this->_loc = new Localize(OBIB_LOCALE,"classes");
   }
@@ -146,7 +146,7 @@ class BiblioCopyQuery extends Query {
     $sql = $this->mkSQL('select * from biblio_copy_fields '
       . 'where bibid=%N and copyid=%N', $bibid, $copyid);
     $rows = $this->select($sql);
-    $fields = array();
+    $fields = [];
     while ($r = $rows->next()) {
       $fields[$r['code']] = $r['data'];
     }
@@ -219,7 +219,7 @@ class BiblioCopyQuery extends Query {
     if ($this->errorOccurred()) return false;
     if ($dupBarcode) {
       $this->_errorOccurred = true;
-      $this->_error = $this->_loc->getText("biblioCopyQueryErr2",array("barcodeNmbr"=>$copy->getBarcodeNmbr()));
+      $this->_error = $this->_loc->getText("biblioCopyQueryErr2",["barcodeNmbr"=>$copy->getBarcodeNmbr()]);
       return false;
     }
     $sql = $this->mkSQL("insert into biblio_copy values (%N"
@@ -253,7 +253,7 @@ class BiblioCopyQuery extends Query {
     if ($this->errorOccurred()) return false;
     if ($dupBarcode) {
       $this->_errorOccurred = true;
-      $this->_error = $this->_loc->getText("biblioCopyQueryErr2",array("barcodeNmbr"=>$copy->getBarcodeNmbr()));
+      $this->_error = $this->_loc->getText("biblioCopyQueryErr2",["barcodeNmbr"=>$copy->getBarcodeNmbr()]);
       return false;
     }
     $sql = $this->mkSQL("update biblio_copy set "
@@ -383,7 +383,7 @@ class BiblioCopyQuery extends Query {
                         OBIB_STATUS_IN, OBIB_STATUS_SHELVING_CART);
     if (!$massCheckin) {
       $prefix = "and (";
-      for ($i = 0; $i < count($bibids); $i++) {
+      for ($i = 0; $i < (is_countable($bibids) ? count($bibids) : 0); $i++) {
         $sql .= $prefix;
 	$sql .= $this->mkSQL("(bibid=%N and copyid=%N)",
                              $bibids[$i], $copyids[$i]);
@@ -401,8 +401,8 @@ class BiblioCopyQuery extends Query {
                         . "and biblio.material_cd=checkout_privs.material_cd ",
                         $bibid, $classification);
     $rows = $this->exec($sql);
-    if (count($rows) != 1) {
-      return array('checkout_limit'=>0, 'renewal_limit'=>0);
+    if ((is_countable($rows) ? count($rows) : 0) != 1) {
+      return ['checkout_limit'=>0, 'renewal_limit'=>0];
     }
     return $rows[0];
   }

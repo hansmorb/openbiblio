@@ -13,7 +13,7 @@ $loc = new Localize(OBIB_LOCALE,$tab);
 
 if (!isset($_REQUEST['posted'])) {
   require_once("../shared/logincheck.php");
-  showForm(array('opacFlg'=>'CHECKED'));
+  showForm(['opacFlg'=>'CHECKED']);
 } else {
   $postVars = $_POST;
   if ($_REQUEST['posted'] == 'media_change') {
@@ -23,7 +23,7 @@ if (!isset($_REQUEST['posted'])) {
     $restrictInDemo = true;
     require_once("../shared/logincheck.php");
     $biblio = postVarsToBiblio($postVars);
-    $pageErrors = array();
+    $pageErrors = [];
     if (!$biblio->validateData()) {
       $pageErrors = array_merge($pageErrors, biblioToPageErrors($biblio));
     }
@@ -68,7 +68,7 @@ function postVarsToBiblio($post) {
   return $biblio;
 }
 function biblioToPageErrors($biblio) {
-  $pageErrors = array();
+  $pageErrors = [];
   $pageErrors["callNmbr1"] = $biblio->getCallNmbrError();
   $biblioFlds = $biblio->getBiblioFields();
   foreach($biblio->getBiblioFields() as $index => $field) {
@@ -84,7 +84,7 @@ function customFieldErrors($biblio) {
   $matQ->connect();
   $rows = $matQ->get($biblio->getMaterialCd());
   $matQ->close();
-  $errors = array();
+  $errors = [];
   $fields = $biblio->getBiblioFields();
   foreach ($rows as $row) {
     $idx = sprintf('%03d%s', $row['tag'], $row['subfieldCd']);
@@ -113,7 +113,7 @@ function insertBiblio($biblio) {
   $biblioQ->close();
   return $bibid;
 }
-function showForm($postVars, $pageErrors=array()) {
+function showForm($postVars, $pageErrors=[]) {
   global $tab, $nav, $loc;
   $helpPage = "biblioEdit";
   $focus_form_name = "newbiblioform";

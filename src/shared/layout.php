@@ -25,7 +25,7 @@
   $layout_whitelist = array_merge($layout_whitelist, $layout_default_whitelist);
   
   $re = '/^[-_A-Za-z0-9]+$/'; # To avoid quoting distopia.
-  assert('preg_match($re, $_REQUEST["name"])');
+  assert(preg_match($re, $_REQUEST["name"]));
   $filename = '../layouts/'.$_REQUEST["name"].'.php';
   if (!is_readable($filename)) {
     $filename = '../layouts/default/'.$_REQUEST["name"].'.php';
@@ -36,18 +36,18 @@
       $filename = "../layouts/default/list.php"; // default to this 
       $classname = "Layout_list"; 
   }
-  assert('is_readable($filename)');
+  assert(is_readable($filename));
   
   require_once($filename);
   
-  assert('class_exists($classname)');
+  assert(class_exists($classname));
   
   if (isset($_REQUEST['rpt'])) {
-    $rpt = Report::load($_REQUEST['rpt']);
+    $rpt = (new Report())->load($_REQUEST['rpt']);
   } else {
     $rpt = new Iter;  # Some layouts don't need a report.
   }
-  assert('$rpt != NULL');
+  assert($rpt != NULL);
   
   // Rendering a large layout can take a while.
   set_time_limit(90);
@@ -56,7 +56,7 @@
   if (method_exists($l, 'paramDefs')) {
     $defs = $l->paramDefs();
   } else {
-    $defs = array();
+    $defs = [];
   }
   if (empty($defs) or isset($_REQUEST['filled'])) {
     $params = new Params;
@@ -100,7 +100,7 @@
 <input type="hidden" name="filled" value="<?php echo H('1') ?>" />
 
 <?php
-  Params::printForm($defs, 'lay_');
+  (new Params())->printForm($defs, 'lay_');
 ?>
 
 <input type="submit" value="Submit" class="button" />

@@ -67,7 +67,7 @@
   unset($_SESSION["postVars"]);
   unset($_SESSION["pageErrors"]);
 
-  $msg = $loc->getText("mbrRenewSuccess",array("length"=>$length));
+  $msg = $loc->getText("mbrRenewSuccess",["length"=>$length]);
   $msg = urlencode($msg);
   header("Location: ../circ/mbr_view.php?mbrid=".$mbr->getMbrid()."&reset=Y&msg=".$msg);
   exit();

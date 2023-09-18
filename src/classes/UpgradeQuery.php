@@ -6,7 +6,7 @@
 require_once("../classes/InstallQuery.php");
 
 class UpgradeQuery extends InstallQuery {
-  function UpgradeQuery() {
+  function __construct() {
     # Call query constructor so database connection gets made
     $this->Query();
   }
@@ -40,7 +40,7 @@ class UpgradeQuery extends InstallQuery {
      $sql = "describe ".$tableName;
      $rows = $this->exec($sql);
      if (is_array($rows)) {
-       $columns = array();
+       $columns = [];
        foreach ($rows as $row) {
          if (is_array($row)) {
            if (!empty($row["Field"])) {
@@ -64,18 +64,12 @@ class UpgradeQuery extends InstallQuery {
   # notifying the user of upgrade changes.
   function performUpgrade_e($fromTablePrfx = DB_TABLENAME_PREFIX, $toTablePrfx = DB_TABLENAME_PREFIX) {
     # Each of these routines should update the given version to the next higher version.
-    $upgrades = array(
-      '0.3.0' => '_upgrade030_e',
-      '0.4.0' => '_upgrade040_e',
-      '0.5.2' => '_upgrade052_e',
-      '0.6.0' => '_upgrade060_e',
-      '0.7.0' => '_upgrade071_e',
-    );
+    $upgrades = ['0.3.0' => '_upgrade030_e', '0.4.0' => '_upgrade040_e', '0.5.2' => '_upgrade052_e', '0.6.0' => '_upgrade060_e', '0.7.0' => '_upgrade071_e'];
     $tmpPrfx = "obiblio_upgrade_";
     # FIXME - translate upgrade messages
     $locale = $this->getCurrentLocale($fromTablePrfx);
 
-    $notices = array();
+    $notices = [];
     # Do this first so new tables always have a prefix, if desired.
     if ($fromTablePrfx != $toTablePrfx) {
       $this->renameTables($fromTablePrfx, $toTablePrfx);
@@ -86,20 +80,20 @@ class UpgradeQuery extends InstallQuery {
         break;	# Done
       } elseif (isset($upgrades[$version])) {
         $func = $upgrades[$version];
-        list($n, $error) = $this->$func($toTablePrfx, $tmpPrfx);
+        [$n, $error] = $this->$func($toTablePrfx, $tmpPrfx);
         if ($error) {
-          return array(NULL, $error);
+          return [NULL, $error];
         }
         $notices = array_merge($notices, $n);
       } elseif (!$version) {
         $error = new ObibError("No existing OpenBiblio database, please perform a fresh install.");
-        return array(NULL, $error);
+        return [NULL, $error];
       } else {
         $error = new ObibError('Unknown database version: '.$version.'.  No automatic upgrade routine available.');
-        return array(NULL, $error);
+        return [NULL, $error];
       }
     } while (1);
-    return array($notices, NULL);
+    return [$notices, NULL];
   }
   # Individual upgrade functions
   # Each of these should upgrade the indicated database version by one version.
@@ -113,53 +107,36 @@ class UpgradeQuery extends InstallQuery {
     $this->freshInstall('en', false, '0.4.0', $tmpPrfx);
 
     # marc data conversion
-    $fields = array(
-      'edition' => array(250, 'a'),
-      'isbn_nmbr' => array(20, 'a'),
-      'lccn_nmbr' => array(10, 'a'),
-      'lc_call_nmbr' => array(50, 'a'),
-      'lc_item_nmbr' => array(50, 'b'),
-      'udc_nmbr' => array(82, 'a'),
-      'udc_ed_nmbr' => array(82, '2'),
-      'publication_loc' => array(260, 'a'),
-      'publisher' => array(260, 'b'),
-      'publication_dt' => array(260, 'c'),
-      'summary' => array(520, 'a'),
-      'pages' => array(300, 'a'),
-      'physical_details' => array(300, 'b'),
-      'dimensions' => array(300, 'c'),
-      'accompanying' => array(300, 'e'),
-      'price' => array(20, 'c'),
-    );
+    $fields = ['edition' => [250, 'a'], 'isbn_nmbr' => [20, 'a'], 'lccn_nmbr' => [10, 'a'], 'lc_call_nmbr' => [50, 'a'], 'lc_item_nmbr' => [50, 'b'], 'udc_nmbr' => [82, 'a'], 'udc_ed_nmbr' => [82, '2'], 'publication_loc' => [260, 'a'], 'publisher' => [260, 'b'], 'publication_dt' => [260, 'c'], 'summary' => [520, 'a'], 'pages' => [300, 'a'], 'physical_details' => [300, 'b'], 'dimensions' => [300, 'c'], 'accompanying' => [300, 'e'], 'price' => [20, 'c']];
     foreach ($fields as $fname => $marc) {
       $this->insertBiblioFields($marc[0], $marc[1], $prfx, $tmpPrfx, $fname);
     }
-    
+
     # biblio table conversion
     $this->copyDataToNewTable("biblio", $prfx, $tmpPrfx,
-                              array(
-                                "bibid" => "bibid",
-                                "create_dt" => "create_dt",
-                                "last_change_dt" => "last_updated_dt",
-                                //TODO: Currently using 1 for last_change_userid, get real id
-                                "last_change_userid" => "1",
-                                "material_cd" => "material_cd",
-                                "collection_cd" => "collection_cd",
-                                "call_nmbr1" => "call_nmbr",
-                                "call_nmbr2" => "NULL",
-                                "call_nmbr3" => "NULL",
-                                "title" => "title",
-                                "title_remainder" => "subtitle",
-                                "responsibility_stmt" => "trim(concat(author,' ',add_author))",
-                                "author" => "author",
-                                "topic1" => "NULL",
-                                "topic2" => "NULL",
-                                "topic3" => "NULL",
-                                "topic4" => "NULL",
-                                "topic5" => "NULL",
-                                "opac_flg" => "'Y'",
-                              ));
-   
+                              [
+                                  "bibid" => "bibid",
+                                  "create_dt" => "create_dt",
+                                  "last_change_dt" => "last_updated_dt",
+                                  //TODO: Currently using 1 for last_change_userid, get real id
+                                  "last_change_userid" => "1",
+                                  "material_cd" => "material_cd",
+                                  "collection_cd" => "collection_cd",
+                                  "call_nmbr1" => "call_nmbr",
+                                  "call_nmbr2" => "NULL",
+                                  "call_nmbr3" => "NULL",
+                                  "title" => "title",
+                                  "title_remainder" => "subtitle",
+                                  "responsibility_stmt" => "trim(concat(author,' ',add_author))",
+                                  "author" => "author",
+                                  "topic1" => "NULL",
+                                  "topic2" => "NULL",
+                                  "topic3" => "NULL",
+                                  "topic4" => "NULL",
+                                  "topic5" => "NULL",
+                                  "opac_flg" => "'Y'",
+                              ]);
+
     # biblio_status -> biblio_copy conversion
     $sql = "insert into ".$tmpPrfx."biblio_copy "
 ."(bibid,  copyid,copy_desc,barcode_nmbr,  status_cd,                status_begin_dt,                       due_back_dt,   mbrid) select"
@@ -167,104 +144,46 @@ class UpgradeQuery extends InstallQuery {
           .$prfx."biblio as b "
           ."left join ".$prfx."biblio_status as bs on b.bibid=bs.bibid";
     $this->exec($sql);
-    
+
     $sql = "update ".$tmpPrfx."biblio_copy set status_cd = 'hld' where status_cd = 'cll'";
     $this->exec($sql);
-    
+
     $this->dropTable($prfx.'biblio');
     $this->dropTable($prfx.'biblio_copy');
 
     #collection_dm data conversion
     $this->copyDataToNewTable("collection_dm", $prfx, $tmpPrfx,
-                              array(
-                                "code" => "code",
-                                "description" => "description",
-                                "default_flg" => "default_flg",
-                                "days_due_back" => "days_due_back",
-                                "daily_late_fee" => "0.00",
-                              ));
-    
+                              ["code" => "code", "description" => "description", "default_flg" => "default_flg", "days_due_back" => "days_due_back", "daily_late_fee" => "0.00"]);
+
     $this->dropTable($prfx.'collection_dm');
 
     #member table conversion
     $this->copyDataToNewTable("member", $prfx, $tmpPrfx,
-                              array(
-                                "mbrid" => "mbrid",
-                                "barcode_nmbr" => "barcode_nmbr",
-                                "create_dt" => "create_dt",
-                                "last_change_dt" => "sysdate()",
-                                "last_change_userid" => "1",
-                                "last_name" => "last_name",
-                                "first_name" => "first_name",
-                                "address1" => "address1",
-                                "address2" => "address2",
-                                "city" => "city",
-                                "state" => "state",
-                                "zip" => "zip",
-                                "zip_ext" => "zip_ext",
-                                "home_phone" => "home_phone",
-                                "work_phone" => "work_phone",
-                                "email" => "NULL",
-                                "classification" => "classification",
-                                "school_grade" => "school_grade",
-                                "school_teacher" => "school_teacher",
-                              ));
+                              ["mbrid" => "mbrid", "barcode_nmbr" => "barcode_nmbr", "create_dt" => "create_dt", "last_change_dt" => "sysdate()", "last_change_userid" => "1", "last_name" => "last_name", "first_name" => "first_name", "address1" => "address1", "address2" => "address2", "city" => "city", "state" => "state", "zip" => "zip", "zip_ext" => "zip_ext", "home_phone" => "home_phone", "work_phone" => "work_phone", "email" => "NULL", "classification" => "classification", "school_grade" => "school_grade", "school_teacher" => "school_teacher"]);
 
     $this->dropTable($prfx.'member');
 
     #staff table conversion
     $this->copyDataToNewTable("staff", 
                               $prfx, $tmpPrfx,
-                              array(
-                                "userid" => "userid",
-                                "create_dt" => "create_dt",
-                                "last_change_dt" => "last_updated_dt",
-                                "last_change_userid" => "1",
-                                "username" => "username",
-                                "pwd" => "pwd",
-                                "last_name" => "last_name",
-                                "first_name" => "first_name",
-                                "suspended_flg" => "suspended_flg",
-                                "admin_flg" => "admin_flg",
-                                "circ_flg" => "circ_flg",
-                                "circ_mbr_flg" => "circ_flg",
-                                "catalog_flg" => "catalog_flg",
-                                "reports_flg" => "admin_flg",
-                              ));
-    
+                              ["userid" => "userid", "create_dt" => "create_dt", "last_change_dt" => "last_updated_dt", "last_change_userid" => "1", "username" => "username", "pwd" => "pwd", "last_name" => "last_name", "first_name" => "first_name", "suspended_flg" => "suspended_flg", "admin_flg" => "admin_flg", "circ_flg" => "circ_flg", "circ_mbr_flg" => "circ_flg", "catalog_flg" => "catalog_flg", "reports_flg" => "admin_flg"]);
+
     $this->dropTable($prfx.'staff');
 
     #settings data conversion
     $this->copyDataToNewTable("settings", 
                               $prfx, $tmpPrfx,
-                              array(
-                                "library_name" => "library_name",
-                                "library_image_url" => "library_image_url",
-                                "use_image_flg" => "use_image_flg",
-                                "library_hours" => "library_hours",
-                                "library_phone" => "library_phone",
-                                "library_url" => "library_url",
-                                "opac_url" => "opac_url",
-                                "session_timeout" => "session_timeout",
-                                "items_per_page" => "items_per_page",
-                                "version" => "'0.4.0'",
-                                "themeid" => "1",
-                                "purge_history_after_months" => "6",
-                                "block_checkouts_when_fines_due" => "'Y'",
-                                "locale" => "'en'",
-                                "charset" => "'iso-8859-1'",
-                                "html_lang_attr" => "NULL",
-                              ));
+                              ["library_name" => "library_name", "library_image_url" => "library_image_url", "use_image_flg" => "use_image_flg", "library_hours" => "library_hours", "library_phone" => "library_phone", "library_url" => "library_url", "opac_url" => "opac_url", "session_timeout" => "session_timeout", "items_per_page" => "items_per_page", "version" => "'0.4.0'", "themeid" => "1", "purge_history_after_months" => "6", "block_checkouts_when_fines_due" => "'Y'", "locale" => "'en'", "charset" => "'iso-8859-1'", "html_lang_attr" => "NULL"]);
 
     $this->dropTable($prfx.'settings');
-    
+
     # moving tables that haven't changed in structure,
     # yet may have been modified by the user
     $this->renamePrfxedTable("material_type_dm", $prfx, $tmpPrfx);
     $this->renamePrfxedTable("theme", $prfx, $tmpPrfx);
     $this->renameTables($tmpPrfx, $prfx);
-    $notices = array('Any existing hold requests have been forgotten.');
-    return array($notices, NULL); # no error
+    $notices = ['Any existing hold requests have been forgotten.'];
+    return [$notices, NULL]; # no error
   }
   /* Upgrade 0.4.0 to 0.5.2 */
   function _upgrade040_e($prfx, $tmpPrfx) {
@@ -343,8 +262,8 @@ class UpgradeQuery extends InstallQuery {
     $this->exec('drop table '.$prfx.'state_dm ');
 
     $this->exec('update '.$prfx.'settings set version=\'0.5.2\'');
-    $notices = array('All staff passwords have been reset to be equal to the corresponding usernames.');
-    return array($notices, NULL); # no error
+    $notices = ['All staff passwords have been reset to be equal to the corresponding usernames.'];
+    return [$notices, NULL]; # no error
   }
   /* Upgrade 0.5.2 to 0.6.0 */
   function _upgrade052_e($prfx, $tmpPrfx) {
@@ -355,16 +274,16 @@ class UpgradeQuery extends InstallQuery {
                 . 'set bc.create_dt=b.create_dt '
                 . 'where b.bibid=bc.bibid ');
     $this->exec("update settings set version='0.6.0'");
-    $notices = array();
-    return array($notices, NULL);
+    $notices = [];
+    return [$notices, NULL];
   }
   /* Upgrade 0.6.0 to 0.7.0 */
   function _upgrade060_e($prfx, $tmpPrfx) {
     $this->executeSqlFile('../install/0.7.0/sql/biblio_copy_fields.sql', $prfx);
     $this->executeSqlFile('../install/0.7.0/sql/biblio_copy_fields_dm.sql', $prfx);
     $this->exec("update settings set version='0.7.0'");
-    $notices = array();
-    return array($notices, NULL);
+    $notices = [];
+    return [$notices, NULL];
   }
   /* Upgrade 0.7.0 to 0.7.1 */
   function _upgrade071_e($prfx, $tmpPrfx) {
@@ -395,8 +314,8 @@ class UpgradeQuery extends InstallQuery {
                 . $prfx.'material_usmarc_xref.materialCd='.$prfx.'material_type_dm.code '
                 . 'where '.$prfx.'material_type_dm.code is null ');
     $this->exec("update settings set version='0.7.1'");
-    $notices = array();
-    return array($notices, NULL);
+    $notices = [];
+    return [$notices, NULL];
   }
 }
 

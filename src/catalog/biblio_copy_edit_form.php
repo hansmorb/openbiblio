@@ -68,17 +68,13 @@
   }
 
   # Transitions to and from these status codes aren't allowed on this form.
-  $disallowed = array(
-    OBIB_STATUS_SHELVING_CART,
-    OBIB_STATUS_OUT,
-    OBIB_STATUS_ON_HOLD,
-  );
+  $disallowed = [OBIB_STATUS_SHELVING_CART, OBIB_STATUS_OUT, OBIB_STATUS_ON_HOLD];
 
   require_once("../shared/header.php");
 ?>
 
 <font class="small">
-<?php echo $loc->getText("catalogFootnote",array("symbol"=>"*")); ?>
+<?php echo $loc->getText("catalogFootnote",["symbol"=>"*"]); ?>
 </font>
 
 <form name="editCopyForm" method="POST" action="../catalog/biblio_copy_edit.php">

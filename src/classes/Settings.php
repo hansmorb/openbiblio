@@ -12,26 +12,26 @@
  ******************************************************************************
  */
 class Settings {
-  var $_libraryName = "";
-  var $_libraryImageUrl = "";
-  var $_isUseImageSet = false;
-  var $_libraryHours = "";
-  var $_libraryPhone = "";
-  var $_libraryUrl = "";
-  var $_opacUrl = "";
-  var $_sessionTimeout = 0;
-  var $_sessionTimeoutError = "";
-  var $_itemsPerPage = 0;
-  var $_itemsPerPageError = "";
-  var $_version = "";
-  var $_themeid = 0;
-  var $_purgeHistoryAfterMonths = 0;
-  var $_purgeHistoryAfterMonthsError = "";
-  var $_isBlockCheckoutsWhenFinesDue = TRUE;
-  var $_holdMaxDays = 0;
-  var $_locale = "";
-  var $_charset = "";
-  var $_htmlLangAttr = "";
+  public $_libraryName = "";
+  public $_libraryImageUrl = "";
+  public $_isUseImageSet = false;
+  public $_libraryHours = "";
+  public $_libraryPhone = "";
+  public $_libraryUrl = "";
+  public $_opacUrl = "";
+  public $_sessionTimeout = 0;
+  public $_sessionTimeoutError = "";
+  public $_itemsPerPage = 0;
+  public $_itemsPerPageError = "";
+  public $_version = "";
+  public $_themeid = 0;
+  public $_purgeHistoryAfterMonths = 0;
+  public $_purgeHistoryAfterMonthsError = "";
+  public $_isBlockCheckoutsWhenFinesDue = TRUE;
+  public $_holdMaxDays = 0;
+  public $_locale = "";
+  public $_charset = "";
+  public $_htmlLangAttr = "";
 
   /****************************************************************************
   * @return array with code and description of installed locales
@@ -40,14 +40,14 @@ class Settings {
   */
   function getLocales () {
     $dir_handle = opendir(OBIB_LOCALE_ROOT);
-    $arr_locale = array();
+    $arr_locale = [];
     
     while (false!==($file=readdir($dir_handle))) {
       if ($file != '.' && $file != '..') {
         if (is_dir (OBIB_LOCALE_ROOT."/".$file)) {
           if (file_exists(OBIB_LOCALE_ROOT.'/'.$file.'/metadata.php')) {
             include(OBIB_LOCALE_ROOT.'/'.$file.'/metadata.php');
-	    $arr_temp = array($file => $lang_metadata['locale_description']);
+	    $arr_temp = [$file => $lang_metadata['locale_description']];
 	    $arr_locale = array_merge($arr_locale, $arr_temp);
           }
         }

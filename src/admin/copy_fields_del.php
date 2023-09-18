@@ -41,7 +41,7 @@
   #**************************************************************************
   require_once("../shared/header.php");
 ?>
-<?php echo $loc->getText("Copy field, %desc%, has been deleted.", array('desc'=>$description));?><br><br>
+<?php echo $loc->getText("Copy field, %desc%, has been deleted.", ['desc'=>$description]);?><br><br>
 <a href="../admin/copy_fields_list.php"><?php echo $loc->getText("return to copy field list"); ?></a>
 
 <?php require_once("../shared/footer.php"); ?>

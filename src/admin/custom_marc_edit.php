@@ -24,7 +24,7 @@
     exit();
   }
 
-  $rec = array();
+  $rec = [];
   $rec['materialCd'] = $_POST["materialCd"];
   $rec['xref_id'] = $_POST["xref_id"];
   $rec['tag'] = $_POST["tag"];
@@ -38,7 +38,7 @@
   $fld = new BiblioField();
   $fld->setTag($_POST["tag"]);
   $fld->setSubfieldCd($_POST["subfieldCd"]);
-  $pageErrors = array();
+  $pageErrors = [];
   $validData = $fld->validateData();
   if (!$validData) {
     $pageErrors["tag"] = $fld->getTagError();

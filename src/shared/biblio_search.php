@@ -200,7 +200,7 @@ function changePage(page,sort)
     *  Printing result stats and page nav
     ************************************************************************** -->
 <?php 
-  echo $loc->getText("biblioSearchResultTxt",array("items"=>$biblioQ->getRowCount()));
+  echo $loc->getText("biblioSearchResultTxt",["items"=>$biblioQ->getRowCount()]);
   if ($biblioQ->getRowCount() > 1) {
     echo $loc->getText("biblioSearch".$sortBy);
     if ($sortBy == "author") {
@@ -211,7 +211,7 @@ function changePage(page,sort)
   }
 ?>
 <br />
-<?php printResultPages($loc, $currentPageNmbr, $biblioQ->getPageCount(), $sortBy); ?><br>
+<?php printResultPages($loc, $currentPageNmbr); ?><br>
 <br>
 
 <!--**************************************************************************
@@ -243,7 +243,7 @@ function changePage(page,sort)
             </font></td>
             <td class="primary" ><font class="small"><b><?php echo $loc->getText("biblioSearchCopyStatus"); ?></b>: <?php echo H($biblioStatusDm[$biblio->getStatusCd()]);?></font></td>
           </tr>
-          <?php 
+<?php 
         }
       } else {
         $priorBibid = $biblio->getBibid();
@@ -307,5 +307,5 @@ function changePage(page,sort)
     $biblioQ->close();
   ?>
   </table><br>
-<?php printResultPages($loc, $currentPageNmbr, $biblioQ->getPageCount(), $sortBy); ?><br>
+<?php printResultPages($loc, $currentPageNmbr); ?><br>
 <?php require_once("../shared/footer.php"); ?>

@@ -27,7 +27,7 @@
   #****************************************************************************
   #*  Validate data
   #****************************************************************************
-  $rec = array();
+  $rec = [];
   $rec['materialCd'] = $_POST["materialCd"];
   $rec['tag'] = $_POST["tag"];
   $rec['subfieldCd']  = $_POST["subfieldCd"];
@@ -37,7 +37,7 @@
   $fld = new BiblioField();
   $fld->setTag($_POST["tag"]);
   $fld->setSubfieldCd($_POST["subfieldCd"]);
-  $pageErrors = array();
+  $pageErrors = [];
   $validData = $fld->validateData();
   if (!$validData) {
     $pageErrors["tag"] = $fld->getTagError();

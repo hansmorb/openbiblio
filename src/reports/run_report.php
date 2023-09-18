@@ -2,7 +2,7 @@
 /* This file is part of a copyrighted work; it is distributed with NO WARRANTY.
  * See the file COPYRIGHT.html for more details.
  */
- 
+
   require_once("../shared/common.php");
 
   require_once("../classes/Report.php");
@@ -25,7 +25,7 @@
   } else {
     $format = 'paged';
   }
-  
+
   function echolink($page, $text, $newSort=NULL) {
     global $tab, $nav, $format;
     echo '<a href="../reports/run_report.php?type=previous';
@@ -79,9 +79,9 @@
     exit(0);
   }
   if ($_REQUEST['type'] == 'previous') {
-    $rpt = Report::load('Report');
+    $rpt = (new Report())->load('Report');
   } else {
-    list($rpt, $err) = Report::create_e($_REQUEST['type'], 'Report');
+    [$rpt, $err] = (new Report())->create_e($_REQUEST['type'], 'Report');
     if ($err) {
       $rpt = NULL;
     }
@@ -93,14 +93,14 @@
 
   if ($_REQUEST['type'] == 'previous') {
     if (isset($_REQUEST['rpt_order_by'])) {
-      list($rpt, $errs) = $rpt->variant_el(array('order_by'=>$_REQUEST['rpt_order_by']));
-      assert('empty($errs)');
+      [$rpt, $errs] = $rpt->variant_el(['order_by'=>$_REQUEST['rpt_order_by']]);
+      assert(empty($errs));
     }
   } else {
     $errs = $rpt->initCgi_el();
     if (!empty($errs)) {
       $_SESSION['postVars'] = mkPostVars();
-      $_SESSION['pageErrors'] = array();
+      $_SESSION['pageErrors'] = [];
       foreach ($errs as $k=>$e) {
         $_SESSION['pageErrors'][$k] = $e->toStr();
       }
@@ -120,14 +120,11 @@
     } else {
       $title = $l['name'];
     }
-    Nav::node('results/'.$l['name'], $loc->getText($title),
-      '../shared/layout.php?rpt=Report&name='.U($l['name']));
+    (new Nav())->node('results/'.$l['name'], $loc->getText($title), '../shared/layout.php?rpt=Report&name='.U($l['name']));
   }
-  Nav::node('results/list', $loc->getText("Print list"),
-    '../shared/layout.php?rpt=Report&name=list');
-  Nav::node('reportcriteria', $loc->getText("Report Criteria"),
-    '../reports/report_criteria.php?type='.U($rpt->type()));
-  
+  (new Nav())->node('results/list', $loc->getText("Print list"), '../shared/layout.php?rpt=Report&name=list');
+  (new Nav())->node('reportcriteria', $loc->getText("Report Criteria"), '../reports/report_criteria.php?type='.U($rpt->type()));
+
   if ($format == 'csv') {
     include_once('../classes/CsvTable.php');
     $table = new CsvTable;
@@ -136,7 +133,7 @@
     $rpt->table($table);
     exit;
   }
-  
+
   include('../shared/header.php');
 
   if (isset($_REQUEST["msg"]) && !empty($_REQUEST["msg"])) {
@@ -151,7 +148,7 @@
 
   echo '<p>'.$rpt->count().' '.$loc->getText("results found.").'</p>';
   if ($format == 'paged') {
-    printResultPages($loc, $page, ceil($rpt->count()/OBIB_ITEMS_PER_PAGE));
+    printResultPages($loc, $page);
   }
 ?>
 
@@ -172,7 +169,7 @@
 <?php
   if ($format == 'paged') {
     $rpt->pageTable($page, new Table('echolink'));
-    printResultPages($loc, $page, ceil($rpt->count()/OBIB_ITEMS_PER_PAGE));
+    printResultPages($loc, $page);
   } else {
     $rpt->table(new Table('echolink'));
   }

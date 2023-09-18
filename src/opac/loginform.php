@@ -25,7 +25,7 @@
 
 <br>
 <center>
-<?php echo "<font class=\"error\">".$loc->getText($pageErrors[common])."</font><br><br>"; ?>
+<?php echo "<font class=\"error\">".$loc->getText($pageErrors[\COMMON])."</font><br><br>"; ?>
 <form name="loginform" method="POST" action="../opac/login.php">
 <table class="primary">
   <tr>

@@ -14,19 +14,19 @@
  ******************************************************************************
  */
 class BiblioStatusHist {
-  var $_bibid = "";
-  var $_copyid = "";
-  var $_biblioBarcodeNmbr = "";
-  var $_title = "";
-  var $_author = "";
-  var $_statusCd = "";
-  var $_statusBeginDt = "";
-  var $_mbrid = "";
-  var $_lastName = "";
-  var $_firstName = "";
-  var $_mbrBarcodeNmbr = "";
-  var $_dueBackDt = "";
-  var $_renewalCount = "";
+  public $_bibid = "";
+  public $_copyid = "";
+  public $_biblioBarcodeNmbr = "";
+  public $_title = "";
+  public $_author = "";
+  public $_statusCd = "";
+  public $_statusBeginDt = "";
+  public $_mbrid = "";
+  public $_lastName = "";
+  public $_firstName = "";
+  public $_mbrBarcodeNmbr = "";
+  public $_dueBackDt = "";
+  public $_renewalCount = "";
 
   /****************************************************************************
    * Getter methods for all fields

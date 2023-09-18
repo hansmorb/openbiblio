@@ -21,40 +21,40 @@
 
 class PDF {
   //Private properties
-  var $page;               //current page number
-  var $n;                  //current object number
-  var $offsets;            //array of object offsets
-  var $buffer;             //buffer holding in-memory PDF
-  var $pages;              //array containing pages
-  var $state;              //current document state
-  var $compress;           //compression flag
-  var $w,$h;               //page dimensions
-  var $LineWidth;          //line width in user unit
-  var $fonts;              //array of used fonts
-  var $FontFiles;          //array of font files
-  var $diffs;              //array of encoding differences
-  var $images;             //array of used images
-  var $currentFont;        //current font info
-  var $fontSize;           //current font size in user unit
-  var $DrawColor;          //commands for drawing color
-  var $FillColor;          //commands for filling color
-  var $TextColor;          //commands for text color
-  var $ColorFlag;          //indicates whether fill and text colors are different
-  var $ZoomMode;           //zoom display mode
-  var $LayoutMode;         //layout display mode
-  var $title;              //title
-  var $subject;            //subject
-  var $author;             //author
-  var $keywords;           //keywords
-  var $creator;            //creator
-  var $PDFVersion;         //PDF version number
+  public $page;               //current page number
+  public $n;                  //current object number
+  public $offsets;            //array of object offsets
+  public $buffer;             //buffer holding in-memory PDF
+  public $pages;              //array containing pages
+  public $state;              //current document state
+  public $compress;           //compression flag
+  public $w,$h;               //page dimensions
+  public $LineWidth;          //line width in user unit
+  public $fonts;              //array of used fonts
+  public $FontFiles;          //array of font files
+  public $diffs;              //array of encoding differences
+  public $images;             //array of used images
+  public $currentFont;        //current font info
+  public $fontSize;           //current font size in user unit
+  public $DrawColor;          //commands for drawing color
+  public $FillColor;          //commands for filling color
+  public $TextColor;          //commands for text color
+  public $ColorFlag;          //indicates whether fill and text colors are different
+  public $ZoomMode;           //zoom display mode
+  public $LayoutMode;         //layout display mode
+  public $title;              //title
+  public $subject;            //subject
+  public $author;             //author
+  public $keywords;           //keywords
+  public $creator;            //creator
+  public $PDFVersion;         //PDF version number
 
   /*******************************************************************************
   *                                                                              *
   *                               Public methods                                 *
   *                                                                              *
   *******************************************************************************/
-  function PDF($format, $orientation) {
+  function __construct($format, $orientation) {
     $unit = 'pt';
     //Some checks
     $this->_dochecks();
@@ -62,12 +62,12 @@ class PDF {
     $this->page=0;
     $this->n=2;
     $this->buffer='';
-    $this->pages=array();
+    $this->pages=[];
     $this->state=0;
-    $this->fonts=array();
-    $this->FontFiles=array();
-    $this->diffs=array();
-    $this->images=array();
+    $this->fonts=[];
+    $this->FontFiles=[];
+    $this->diffs=[];
+    $this->images=[];
     $this->DrawColor='0 G';
     $this->FillColor='0 g';
     $this->TextColor='0 g';
@@ -76,15 +76,15 @@ class PDF {
     if(is_string($format)) {
       $format=strtolower($format);
       if($format=='a3') {
-        $format=array(841.89,1190.55);
+        $format=[841.89, 1190.55];
       } elseif($format=='a4') {
-        $format=array(595.28,841.89);
+        $format=[595.28, 841.89];
       } elseif($format=='a5') {
-        $format=array(420.94,595.28);
+        $format=[420.94, 595.28];
       } elseif($format=='letter') {
-        $format=array(612,792);
+        $format=[612, 792];
       } elseif($format=='legal') {
-        $format=array(612,1008);
+        $format=[612, 1008];
       } else {
         $this->Error('Unknown page format: '.$format);
       }
@@ -109,9 +109,9 @@ class PDF {
   }
 
   function dimensions() {
-    return array('x'=>$this->w, 'y'=>$this->h);
+    return ['x'=>$this->w, 'y'=>$this->h];
   }
-  
+
   function newPage() {
     //Start a new page
     if($this->state==0) {
@@ -126,16 +126,16 @@ class PDF {
     $this->fontName = '';
     $this->fontSize = 0;
   }
-  
+
   function font($name, $size) {
     if ($this->fontName == $name && $this->fontSize == $size) {
       return;
     }
-    
+
     if (!isset($this->fonts[$name])) {
       $this->_loadFont($name);
     }
-    
+
     $this->fontName = $name;
     $this->fontSize = $size;
     $this->currentFont =& $this->fonts[$name];
@@ -143,7 +143,7 @@ class PDF {
       $this->_out(sprintf('BT /F%d %.2f Tf ET', $this->currentFont['i'], $this->fontSize));
     }
   }
-  
+
   function textDim($s) {
     //Get width of a string in the current font
     $s=(string)$s;
@@ -151,18 +151,18 @@ class PDF {
     $w=0;
     $l=strlen($s);
     for($i=0;$i<$l;$i++) {
-      $w+=$cw[$s{$i}];
+      $w+=$cw[$s[$i]];
     }
     # array(x-min, y-min, x-max, y-max) -- LOWER-LEFT ORIGIN
     $bbox = $this->currentFont['bbox'];
-    $dim = array();
+    $dim = [];
     $dim['x'] = $w*$this->fontSize/1000.0;
     $dim['y'] = ($bbox[3]-$bbox[1])*$this->fontSize/1000.0;
     $dim['x-base'] = (-1*$bbox[0])*$this->fontSize/1000.0;
     $dim['y-base'] = $bbox[3]*$this->fontSize/1000.0;
     return $dim;
   }
-  
+
   function text($p, $txt) {
     //Output a string
     # array(x-min, y-min, x-max, y-max) -- LOWER-LEFT ORIGIN
@@ -174,19 +174,19 @@ class PDF {
       $s='q '.$this->TextColor.' '.$s.' Q';
     $this->_out($s);
   }
-  
+
   function lineWidth($width) {
     //Set line width
     $this->LineWidth=$width;
     if($this->page>0)
       $this->_out(sprintf('%.2f w',$width));
   }
-  
+
   function line($p1, $p2) {
     $this->_out(sprintf('%.2f %.2f m %.2f %.2f l S',
       $p1['x'], $p1['y'], $p2['x'], $p2['y']));
   }
-  
+
   function startClip($min_pt, $max_pt) {
     $this->_out(sprintf('q %.2f %.2f %.2f %.2f re W n',
       $min_pt['x'], $min_pt['y'], $max_pt['x']-$min_pt['x'], $max_pt['y']-$min_pt['y']));
@@ -202,7 +202,7 @@ class PDF {
     $this->_out('Q');
     $this->_out(sprintf('BT /F%d %.2f Tf ET', $this->currentFont['i'], $this->fontSize));
   }
-  
+
   function close() {
     //Terminate document
     if($this->state==3)
@@ -215,7 +215,7 @@ class PDF {
     $this->_enddoc();
     $this->Output();
   }
-  
+
   /* OLD PUBLIC METHODS */
   function SetDisplayMode($zoom,$layout='continuous')
   {
@@ -229,7 +229,7 @@ class PDF {
     else
       $this->Error('Incorrect layout display mode: '.$layout);
   }
-  
+
   function SetCompression($compress)
   {
     //Set page compression
@@ -238,50 +238,50 @@ class PDF {
     else
       $this->compress=false;
   }
-  
+
   function SetTitle($title)
   {
     //Title of document
     $this->title=$title;
   }
-  
+
   function SetSubject($subject)
   {
     //Subject of document
     $this->subject=$subject;
   }
-  
+
   function SetAuthor($author)
   {
     //Author of document
     $this->author=$author;
   }
-  
+
   function SetKeywords($keywords)
   {
     //Keywords of document
     $this->keywords=$keywords;
   }
-  
+
   function SetCreator($creator)
   {
     //Creator of document
     $this->creator=$creator;
   }
-  
+
   function Error($msg)
   {
     //Fatal error
     die('<B>FPDF error: </B>'.$msg);
   }
-  
+
   function Open()
   {
     //Begin document
     $this->state=1;
   }
-  
-  
+
+
   function SetDrawColor($r,$g=-1,$b=-1)
   {
     //Set color for all stroking operations
@@ -292,7 +292,7 @@ class PDF {
     if($this->page>0)
       $this->_out($this->DrawColor);
   }
-  
+
   function SetFillColor($r,$g=-1,$b=-1)
   {
     //Set color for all filling operations
@@ -304,7 +304,7 @@ class PDF {
     if($this->page>0)
       $this->_out($this->FillColor);
   }
-  
+
   function SetTextColor($r,$g=-1,$b=-1)
   {
     //Set color for text
@@ -314,7 +314,7 @@ class PDF {
       $this->TextColor=sprintf('%.3f %.3f %.3f rg',$r/255,$g/255,$b/255);
     $this->ColorFlag=($this->FillColor!=$this->TextColor);
   }
-  
+
   function Rect($x,$y,$w,$h,$style='')
   {
     //Draw a rectangle
@@ -326,22 +326,22 @@ class PDF {
       $op='S';
     $this->_out(sprintf('%.2f %.2f %.2f %.2f re %s',$x,$y,$w,-$h,$op));
   }
-  
+
   function _loadFont($name) {
     global $PDF_font;
     $re = '/^[-_A-Za-z0-9]+$/'; # To avoid quoting distopia.
-    assert('preg_match($re, $name)');
+    assert(preg_match($re, $name));
     $fname = $this->_getfontpath().$name.'.php';
     $PDF_font = false;
     @include_once($fname);
     if (!is_array($PDF_font)) {
       $this->Error('Invalid font: '.$name);
     }
-    $PDF_font['i']=count($this->fonts)+1;
+    $PDF_font['i']=(is_countable($this->fonts) ? count($this->fonts) : 0)+1;
     #$this->fonts[$fontkey]=array('i'=>$i,'type'=>$type,'name'=>$name,'desc'=>$desc,'up'=>$up,'ut'=>$ut,'cw'=>$cw,'enc'=>$enc,'file'=>$file);
     if (isset($PDF_font['diff'])) {
       $d = 0;
-      $nb = count($this->diffs);
+      $nb = is_countable($this->diffs) ? count($this->diffs) : 0;
       for ($i=1; $i<=$nb; $i++) {
         if ($this->diffs[$i] == $PDF_font['diff']) {
           $d = $i;
@@ -356,14 +356,14 @@ class PDF {
     }
     if (isset($PDF_font['file'])) {
       if ($PDF_font['type']=='TrueType') {
-        $this->FontFiles[$PDF_font['file']]=array('length1'=>$PDF_font['originalsize']);
+        $this->FontFiles[$PDF_font['file']]=['length1'=>$PDF_font['originalsize']];
       } else {
-        $this->FontFiles[$PDF_font['file']]=array('length1'=>$PDF_font['size1'],'length2'=>$PDF_font['size2']);
+        $this->FontFiles[$PDF_font['file']]=['length1'=>$PDF_font['size1'], 'length2'=>$PDF_font['size2']];
       }
     }
     $this->fonts[$name] = $PDF_font;
   }
-  
+
   function Image($file,$x,$y,$w=0,$h=0,$type='',$link='')
   {
     //Put an image on the page
@@ -393,7 +393,7 @@ class PDF {
         $info=$this->$mtd($file);
       }
       ini_set('magic_quotes_runtime', $mqr);
-      $info['i']=count($this->images)+1;
+      $info['i']=(is_countable($this->images) ? count($this->images) : 0)+1;
       $this->images[$file]=$info;
     }
     else
@@ -413,7 +413,7 @@ class PDF {
     if($link)
       $this->Link($x,$y,$w,$h,$link);
   }
-  
+
   function Output($name='',$dest='')
   {
     //Output PDF to some destination
@@ -481,7 +481,7 @@ class PDF {
     }
     return '';
   }
-  
+
   /*******************************************************************************
   *                                                                              *
   *                              Protected methods                               *
@@ -513,7 +513,7 @@ class PDF {
       }
     }
   }
-  
+
   function _getfontpath()
   {
     #if(!defined('FPDF_FONTPATH') && is_dir(dirname(__FILE__).'/font'))
@@ -521,7 +521,7 @@ class PDF {
     #return defined('FPDF_FONTPATH') ? FPDF_FONTPATH : '';
     return "../font/";
   }
-  
+
   function _putpages()
   {
     $nb=$this->page;
@@ -555,7 +555,7 @@ class PDF {
     $this->_out('>>');
     $this->_out('endobj');
   }
-  
+
   function _putfonts()
   {
     $nf=$this->n;
@@ -581,13 +581,13 @@ class PDF {
       $compressed=(substr($file,-2)=='.z');
       if(!$compressed && isset($info['length2']))
       {
-        $header=(ord($font{0})==128);
+        $header=(ord($font[0])==128);
         if($header)
         {
           //Strip first binary header
           $font=substr($font,6);
         }
-        if($header && ord($font{$info['length1']})==128)
+        if($header && ord($font[$info['length1']])==128)
         {
           //Strip second binary header
           $font=substr($font,0,$info['length1']).substr($font,$info['length1']+6);
@@ -665,61 +665,60 @@ class PDF {
       }
     }
   }
-  
+
   function _putimages()
   {
     $filter=($this->compress) ? '/Filter /FlateDecode ' : '';
     reset($this->images);
-    while(list($file,$info)=each($this->images))
-    {
-      $this->_newobj();
-      $this->images[$file]['n']=$this->n;
-      $this->_out('<</Type /XObject');
-      $this->_out('/Subtype /Image');
-      $this->_out('/Width '.$info['w']);
-      $this->_out('/Height '.$info['h']);
-      if($info['cs']=='Indexed')
-        $this->_out('/ColorSpace [/Indexed /DeviceRGB '.(strlen($info['pal'])/3-1).' '.($this->n+1).' 0 R]');
-      else
-      {
-        $this->_out('/ColorSpace /'.$info['cs']);
-        if($info['cs']=='DeviceCMYK')
-          $this->_out('/Decode [1 0 1 0 1 0 1 0]');
-      }
-      $this->_out('/BitsPerComponent '.$info['bpc']);
-      if(isset($info['f']))
-        $this->_out('/Filter /'.$info['f']);
-      if(isset($info['parms']))
-        $this->_out($info['parms']);
-      if(isset($info['trns']) && is_array($info['trns']))
-      {
-        $trns='';
-        for($i=0;$i<count($info['trns']);$i++)
-          $trns.=$info['trns'][$i].' '.$info['trns'][$i].' ';
-        $this->_out('/Mask ['.$trns.']');
-      }
-      $this->_out('/Length '.strlen($info['data']).'>>');
-      $this->_putstream($info['data']);
-      unset($this->images[$file]['data']);
-      $this->_out('endobj');
-      //Palette
-      if($info['cs']=='Indexed')
-      {
+    foreach ($this->images as $file => $info) {
         $this->_newobj();
-        $pal=($this->compress) ? gzcompress($info['pal']) : $info['pal'];
-        $this->_out('<<'.$filter.'/Length '.strlen($pal).'>>');
-        $this->_putstream($pal);
+        $this->images[$file]['n']=$this->n;
+        $this->_out('<</Type /XObject');
+        $this->_out('/Subtype /Image');
+        $this->_out('/Width '.$info['w']);
+        $this->_out('/Height '.$info['h']);
+        if($info['cs']=='Indexed')
+          $this->_out('/ColorSpace [/Indexed /DeviceRGB '.(strlen($info['pal'])/3-1).' '.($this->n+1).' 0 R]');
+        else
+        {
+          $this->_out('/ColorSpace /'.$info['cs']);
+          if($info['cs']=='DeviceCMYK')
+            $this->_out('/Decode [1 0 1 0 1 0 1 0]');
+        }
+        $this->_out('/BitsPerComponent '.$info['bpc']);
+        if(isset($info['f']))
+          $this->_out('/Filter /'.$info['f']);
+        if(isset($info['parms']))
+          $this->_out($info['parms']);
+        if(isset($info['trns']) && is_array($info['trns']))
+        {
+          $trns='';
+          for($i=0;$i<count($info['trns']);$i++)
+            $trns.=$info['trns'][$i].' '.$info['trns'][$i].' ';
+          $this->_out('/Mask ['.$trns.']');
+        }
+        $this->_out('/Length '.strlen($info['data']).'>>');
+        $this->_putstream($info['data']);
+        unset($this->images[$file]['data']);
         $this->_out('endobj');
-      }
+        //Palette
+        if($info['cs']=='Indexed')
+        {
+          $this->_newobj();
+          $pal=($this->compress) ? gzcompress($info['pal']) : $info['pal'];
+          $this->_out('<<'.$filter.'/Length '.strlen($pal).'>>');
+          $this->_putstream($pal);
+          $this->_out('endobj');
+        }
     }
   }
-  
+
   function _putxobjectdict()
   {
     foreach($this->images as $image)
       $this->_out('/I'.$image['i'].' '.$image['n'].' 0 R');
   }
-  
+
   function _putresourcedict()
   {
     $this->_out('/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]');
@@ -731,7 +730,7 @@ class PDF {
     $this->_putxobjectdict();
     $this->_out('>>');
   }
-  
+
   function _putresources()
   {
     $this->_putfonts();
@@ -744,7 +743,7 @@ class PDF {
     $this->_out('>>');
     $this->_out('endobj');
   }
-  
+
   function _putinfo()
   {
     $this->_out('/Producer '.$this->_textstring('FPDF '.FPDF_VERSION));
@@ -760,7 +759,7 @@ class PDF {
       $this->_out('/Creator '.$this->_textstring($this->creator));
     $this->_out('/CreationDate '.$this->_textstring('D:'.date('YmdHis')));
   }
-  
+
   function _putcatalog()
   {
     $this->_out('/Type /Catalog');
@@ -780,19 +779,19 @@ class PDF {
     elseif($this->LayoutMode=='two')
       $this->_out('/PageLayout /TwoColumnLeft');
   }
-  
+
   function _putheader()
   {
     $this->_out('%PDF-'.$this->PDFVersion);
   }
-  
+
   function _puttrailer()
   {
     $this->_out('/Size '.($this->n+1));
     $this->_out('/Root '.$this->n.' 0 R');
     $this->_out('/Info '.($this->n-1).' 0 R');
   }
-  
+
   function _enddoc()
   {
     $this->_putheader();
@@ -827,20 +826,20 @@ class PDF {
     $this->_out('%%EOF');
     $this->state=3;
   }
-  
+
   function _beginpage()
   {
     $this->page++;
     $this->pages[$this->page]='';
     $this->state=2;
   }
-  
+
   function _endpage()
   {
     //End of page contents
     $this->state=1;
   }
-  
+
   function _newobj()
   {
     //Begin a new object
@@ -848,7 +847,7 @@ class PDF {
     $this->offsets[$this->n]=strlen($this->buffer);
     $this->_out($this->n.' 0 obj');
   }
-  
+
   function _parsejpg($file)
   {
     //Extract info from a JPEG file
@@ -863,16 +862,16 @@ class PDF {
       $colspace='DeviceCMYK';
     else
       $colspace='DeviceGray';
-    $bpc=isset($a['bits']) ? $a['bits'] : 8;
+    $bpc=$a['bits'] ?? 8;
     //Read whole file
     $f=fopen($file,'rb');
     $data='';
     while(!feof($f))
       $data.=fread($f,4096);
     fclose($f);
-    return array('w'=>$a[0],'h'=>$a[1],'cs'=>$colspace,'bpc'=>$bpc,'f'=>'DCTDecode','data'=>$data);
+    return ['w'=>$a[0], 'h'=>$a[1], 'cs'=>$colspace, 'bpc'=>$bpc, 'f'=>'DCTDecode', 'data'=>$data];
   }
-  
+
   function _parsepng($file)
   {
     //Extract info from a PNG file
@@ -927,14 +926,14 @@ class PDF {
         //Read transparency info
         $t=fread($f,$n);
         if($ct==0)
-          $trns=array(ord(substr($t,1,1)));
+          $trns=[ord(substr($t,1,1))];
         elseif($ct==2)
-          $trns=array(ord(substr($t,1,1)),ord(substr($t,3,1)),ord(substr($t,5,1)));
+          $trns=[ord(substr($t,1,1)), ord(substr($t,3,1)), ord(substr($t,5,1))];
         else
         {
           $pos=strpos($t,chr(0));
           if($pos!==false)
-            $trns=array($pos);
+            $trns=[$pos];
         }
         fread($f,4);
       }
@@ -953,35 +952,35 @@ class PDF {
     if($colspace=='Indexed' && empty($pal))
       $this->Error('Missing palette in '.$file);
     fclose($f);
-    return array('w'=>$w,'h'=>$h,'cs'=>$colspace,'bpc'=>$bpc,'f'=>'FlateDecode','parms'=>$parms,'pal'=>$pal,'trns'=>$trns,'data'=>$data);
+    return ['w'=>$w, 'h'=>$h, 'cs'=>$colspace, 'bpc'=>$bpc, 'f'=>'FlateDecode', 'parms'=>$parms, 'pal'=>$pal, 'trns'=>$trns, 'data'=>$data];
   }
-  
+
   function _freadint($f)
   {
     //Read a 4-byte integer from file
     $a=unpack('Ni',fread($f,4));
     return $a['i'];
   }
-  
+
   function _textstring($s)
   {
     //Format a text string
     return '('.$this->_escape($s).')';
   }
-  
+
   function _escape($s)
   {
     //Add \ before \, ( and )
     return str_replace(')','\\)',str_replace('(','\\(',str_replace('\\','\\\\',$s)));
   }
-  
+
   function _putstream($s)
   {
     $this->_out('stream');
     $this->_out($s);
     $this->_out('endstream');
   }
-  
+
   function _out($s)
   {
     //Add a line to the document

@@ -2,7 +2,7 @@
 /* This file is part of a copyrighted work; it is distributed with NO WARRANTY.
  * See the file COPYRIGHT.html for more details.
  */
- 
+
   require_once("../shared/common.php");
   $tab = "circulation";
   $nav = "view";
@@ -67,7 +67,7 @@
 <table class="primary" width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr>
     <td width="100%" class="noborder" valign="top">
-      <h1><?php echo $loc->getText("mbrPrintCheckoutsTitle",array("mbrName"=>$mbr->getFirstLastName())); ?></h1>
+      <h1><?php echo $loc->getText("mbrPrintCheckoutsTitle",["mbrName"=>$mbr->getFirstLastName()]); ?></h1>
     </td>
     <td class="noborder" valign="top" nowrap="yes"><font class="small"><a href="javascript:window.close()"><?php echo $loc->getText("mbrPrintCloseWindow"); ?></font></a>&nbsp;&nbsp;</font></td>
   </tr>

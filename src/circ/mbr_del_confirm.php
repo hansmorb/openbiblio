@@ -67,7 +67,7 @@
   if (($checkoutCount > 0) or ($holdCount > 0)) {
 ?>
 <center>
-  <?php echo $loc->getText("mbrDelConfirmWarn",array("name"=>$mbrName,"checkoutCount"=>$checkoutCount,"holdCount"=>$holdCount)); ?>
+  <?php echo $loc->getText("mbrDelConfirmWarn",["name"=>$mbrName, "checkoutCount"=>$checkoutCount, "holdCount"=>$holdCount]); ?>
   <br><br>
   <a href="../circ/mbr_view.php?mbrid=<?php echo HURL($mbrid);?>&amp;reset=Y"><?php echo $loc->getText("mbrDelConfirmReturn"); ?></a>
 </center>
@@ -77,7 +77,7 @@
 ?>
 <center>
 <form name="delbiblioform" method="POST" action="../circ/mbr_view.php?mbrid=<?php echo HURL($mbrid);?>&amp;reset=Y">
-<?php echo $loc->getText("mbrDelConfirmMsg",array("name"=>$mbrName)); ?>
+<?php echo $loc->getText("mbrDelConfirmMsg",["name"=>$mbrName]); ?>
 <br><br>
       <input type="button" onClick="self.location='../circ/mbr_del.php?mbrid=<?php echo H(addslashes(U($mbrid)));?>&amp;name=<?php echo H(addslashes(U($mbrName)));?>'" value="<?php echo $loc->getText("circDelete"); ?>" class="button">
       <input type="submit" value="<?php echo $loc->getText("circCancel"); ?>" class="button">

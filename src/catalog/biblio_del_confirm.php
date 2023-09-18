@@ -75,7 +75,7 @@
   if (($copyCount > 0) or ($holdCount > 0)) {
 ?>
 <center>
-  <?php echo $loc->getText("biblioDelConfirmWarn",array("copyCount"=>$copyCount,"holdCount"=>$holdCount)); ?>
+  <?php echo $loc->getText("biblioDelConfirmWarn",["copyCount"=>$copyCount, "holdCount"=>$holdCount]); ?>
   <br><br>
   <a href="../shared/biblio_view.php?bibid=<?php echo HURL($bibid);?>"><?php echo $loc->getText("biblioDelConfirmReturn"); ?></a>
 </center>
@@ -85,7 +85,7 @@
 ?>
 <center>
 <form name="delbiblioform" method="POST" action="../shared/biblio_view.php?bibid=<?php echo HURL($bibid);?>">
-<?php echo $loc->getText("biblioDelConfirmMsg",array("title"=>$title)); ?>
+<?php echo $loc->getText("biblioDelConfirmMsg",["title"=>$title]); ?>
 <br><br>
       <input type="button" onClick="self.location='../catalog/biblio_del.php?bibid=<?php echo HURL($bibid);?>&amp;title=<?php echo HURL($title);?>'" value="<?php echo $loc->getText("catalogDelete"); ?>" class="button">
       <input type="submit" value="<?php echo $loc->getText("catalogCancel"); ?>" class="button">

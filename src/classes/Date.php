@@ -22,7 +22,7 @@ class Date {
         $gotit = true;
       }
       else {
-        return array(NULL, new ObibError('Ambiguous, use yyyy-mm-dd OR dd.mm.yyyy'));
+        return [NULL, new ObibError('Ambiguous, use yyyy-mm-dd OR dd.mm.yyyy')];
       }
     } elseif (preg_match('/^([0-9]+)\.([0-9]+)\.([0-9]+)$/', $datestr, $m)) {
       # European Style
@@ -33,10 +33,10 @@ class Date {
     }
     if ($gotit) {
       if ($month < 1 or $month > 12) {
-        return array(NULL, new ObibError('Bad month number: '.$month));
+        return [NULL, new ObibError('Bad month number: '.$month)];
       }
       if ($day < 1 or $day > 31) {
-        return array(NULL, new ObibError('Bad day number: '.$day));
+        return [NULL, new ObibError('Bad day number: '.$day)];
       }
       if ($year < 60) {
         $year += 2000;
@@ -44,27 +44,27 @@ class Date {
         $year += 1900;
       }
       if (checkdate($month, $day, $year)) {
-        return array(sprintf('%04d-%02d-%02d', $year, $month, $day), NULL);
+        return [sprintf('%04d-%02d-%02d', $year, $month, $day), NULL];
       } else {
-        return array(NULL, new ObibError('Invalid date, check your calendar'));
+        return [NULL, new ObibError('Invalid date, check your calendar')];
       }
     }
     if ($ref !== NULL) {
-      list($ref, $err) = Date::read_e($ref);
+      [$ref, $err] = (new Date())->read_e($ref);
       if ($err) {
-        return array(NULL, $err);
+        return [NULL, $err];
       }
     } else {
       $ref = date('Y-m-d');
     }
     if ($datestr == 'today' or $datestr == 'now') {
-      return array($ref, NULL);
+      return [$ref, NULL];
     } elseif ($datestr == 'yesterday') {
-      return array(Date::addDays($ref, -1), NULL);
+      return [(new Date())->addDays($ref, -1), NULL];
     } elseif ($datestr == 'tomorrow') {
-      return array(Date::addDays($ref, 1), NULL);
+      return [(new Date())->addDays($ref, 1), NULL];
     } else {
-      return array(NULL, new ObibError('Invalid date format'));
+      return [NULL, new ObibError('Invalid date format')];
     }
   }
   function addDays($date, $days) {
@@ -86,12 +86,12 @@ class Date {
   function getDays($since, $until) {
     $s = strtotime($since);
     $u = strtotime($until);
-    assert('$s <= $u');
+    assert($s <= $u);
 
     $since = date('Y-m-d', $s);
     $until = date('Y-m-d', $u);
-    $days = array();
-    for (; $since!=$until; $since=Date::addDays($since, 1)) {
+    $days = [];
+    for (; $since!=$until; $since=(new Date())->addDays($since, 1)) {
       array_push($days, $since);
     }
     array_push($days, $until);

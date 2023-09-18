@@ -12,19 +12,19 @@
  ******************************************************************************
  */
 class Dm {
-  var $_code = "";
-  var $_description = "";
-  var $_descriptionError = "";
-  var $_defaultFlg = "";
-  var $_daysDueBack = "0";
-  var $_daysDueBackError = "";
-  var $_dailyLateFee = "0";
-  var $_dailyLateFeeError = "";
-  var $_imageFile = "";
-  var $_checkoutLimit = 0;
-  var $_renewalLimit = 0;
-  var $_maxFines = 0;
-  var $_count = "0";
+  public $_code = "";
+  public $_description = "";
+  public $_descriptionError = "";
+  public $_defaultFlg = "";
+  public $_daysDueBack = "0";
+  public $_daysDueBackError = "";
+  public $_dailyLateFee = "0";
+  public $_dailyLateFeeError = "";
+  public $_imageFile = "";
+  public $_checkoutLimit = 0;
+  public $_renewalLimit = 0;
+  public $_maxFines = 0;
+  public $_count = "0";
 
   /****************************************************************************
    * @return boolean true if data is valid, otherwise false.

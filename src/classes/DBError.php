@@ -6,10 +6,10 @@
 /* Most DB errors are fatal, but we sometimes have to catch them. */
 class DbError extends ObibError {
   /* The attributes here are public. */
-  var $sql;
-  var $msg;
-  var $dberror;
-  function DbError($sql, $msg, $dberror) {
+  public $sql;
+  public $msg;
+  public $dberror;
+  function __construct($sql, $msg, $dberror) {
     $this->sql = $sql;
     $this->msg = $msg;
     $this->dberror = $dberror;

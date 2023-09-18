@@ -4,7 +4,7 @@
  */
  
  if (preg_match('/[^a-zA-Z0-9_]/', $tab)) {
-   Fatal::internalError("Possible security violation: bad tab name");
+   (new Fatal())->internalError("Possible security violation: bad tab name");
    exit(); # just in case
  }
  

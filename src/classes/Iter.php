@@ -21,7 +21,7 @@ class Iter {
   function toArray() {
     # Returns an array containing all the elements in the Iter.
     # This may use up all your RAM if you aren't careful.
-    $arr = array();
+    $arr = [];
     while (($i = $this->next()) !== NULL) {
       $arr[] = $i;
     }

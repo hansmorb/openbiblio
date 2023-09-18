@@ -26,7 +26,7 @@
   
 ?>
 <h1><?php echo $loc->getText("holdMessageHdr"); ?></h1>
-<?php echo $loc->getText("holdMessageMsg1",array("barcode"=>$barcode)); ?>
+<?php echo $loc->getText("holdMessageMsg1",["barcode"=>$barcode]); ?>
 <br><br>
 <a href="../circ/checkin_form.php<?php echo H($params); ?>"><?php echo $loc->getText("holdMessageMsg2"); ?></a>
 <?php require_once("../shared/footer.php"); ?>

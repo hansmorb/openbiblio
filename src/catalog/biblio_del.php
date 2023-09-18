@@ -37,7 +37,7 @@
   require_once("../shared/header.php");
 ?>
 <center>
-  <?php echo $loc->getText("biblioDelMsg",array("title"=>$title)); ?>
+  <?php echo $loc->getText("biblioDelMsg",["title"=>$title]); ?>
   <br><br>
   <a href="../catalog/index.php"><?php echo $loc->getText("biblioDelReturn"); ?></a>
 </center>

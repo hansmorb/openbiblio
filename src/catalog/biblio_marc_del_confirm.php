@@ -26,7 +26,7 @@
 ?>
 <center>
 <form name="delfieldform" method="POST" action="../catalog/biblio_marc_del.php?bibid=<?php echo HURL($bibid);?>&amp;fieldid=<?php echo HURL($fieldid);?>">
-  <?php echo $loc->getText("biblioMarcDelConfirmMsg",array("tag"=>$tag,"subfieldCd"=>$subfieldCd)); ?>
+  <?php echo $loc->getText("biblioMarcDelConfirmMsg",["tag"=>$tag, "subfieldCd"=>$subfieldCd]); ?>
   <br><br>
   <input type="submit" value="Delete" class="button">
   <input type="button" onClick="self.location='../catalog/biblio_marc_list.php?bibid=<?php echo HURL($bibid);?>'" value="Cancel" class="button">

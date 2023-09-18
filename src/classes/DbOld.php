@@ -6,7 +6,7 @@
  * FIXME - lose this cruft.
  */
 class DbOld {
-  function DbOld($results, $id) {
+  function __construct($results, $id) {
     $this->results = $results;
     $this->id = $id;
   }
@@ -14,14 +14,14 @@ class DbOld {
     return $this->id;
   }
   function numRows() {
-    $link = QueryAny::db();
+    $link = (new QueryAny())->db();
     return $link->num_rows($this->results);
   }
   function fetchRow($arrayType=OBIB_ASSOC) {
     if (is_bool($this->results)) {
       return false;
     }
-    $link = QueryAny::db();
+    $link = (new QueryAny())->db();
     switch ($arrayType) {
       case OBIB_NUM:
         return $link->fetch_row($this->results);
@@ -36,7 +36,7 @@ class DbOld {
     return false;
   }
   function resetResult() {
-    $link = QueryAny::db();
+    $link = (new QueryAny())->db();
     $link->data_seek($this->results, 0);
   }
 }

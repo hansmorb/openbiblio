@@ -16,12 +16,12 @@ require_once("../classes/Query.php");
  ******************************************************************************
  */
 class MemberQuery extends Query {
-  var $_itemsPerPage = 1;
-  var $_rowNmbr = 0;
-  var $_currentRowNmbr = 0;
-  var $_currentPageNmbr = 0;
-  var $_rowCount = 0;
-  var $_pageCount = 0;
+  public $_itemsPerPage = 1;
+  public $_rowNmbr = 0;
+  public $_currentRowNmbr = 0;
+  public $_currentPageNmbr = 0;
+  public $_rowCount = 0;
+  public $_pageCount = 0;
 
   function setItemsPerPage($value) {
     $this->_itemsPerPage = $value;
@@ -73,8 +73,8 @@ class MemberQuery extends Query {
 
     # Running row count sql statement
     $rows = $this->exec($sqlcount);
-    if (count($rows) != 1) {
-      Fatal::internalError("Wrong number of count rows");
+    if ((is_countable($rows) ? count($rows) : 0) != 1) {
+      (new Fatal())->internalError("Wrong number of count rows");
     }
     # Calculate stats based on row count
     $this->_rowCount = $rows[0]["rowcount"];
@@ -96,8 +96,8 @@ class MemberQuery extends Query {
                         . "left join staff on member.last_change_userid = staff.userid "
                         . "where mbrid=%N ", $mbrid);
     $rows = $this->exec($sql);
-    if (count($rows) != 1) {
-      Fatal::internalError("Bad mbrid");
+    if ((is_countable($rows) ? count($rows) : 0) != 1) {
+      (new Fatal())->internalError("Bad mbrid");
     }
     return $this->_mkObj($rows[0]);
   }
@@ -158,7 +158,7 @@ class MemberQuery extends Query {
     $q->connect();
     $sql = $q->mkSQL('select * from member_fields where mbrid=%N', $mbrid);
     $rows = $q->exec($sql);
-    $fields = array();
+    $fields = [];
     foreach ($rows as $r) {
       $fields[$r['code']] = $r['data'];
     }
@@ -187,8 +187,8 @@ class MemberQuery extends Query {
                         . "where barcode_nmbr = %Q and mbrid <> %N",
                         $barcode, $mbrid);
     $rows = $this->exec($sql);
-    if (count($rows) != 1) {
-      Fatal::internalError('Bad number of rows');
+    if ((is_countable($rows) ? count($rows) : 0) != 1) {
+      (new Fatal())->internalError('Bad number of rows');
     }
     if ($rows[0]['num'] > 0) {
       return true;

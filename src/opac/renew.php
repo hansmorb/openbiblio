@@ -30,7 +30,7 @@
   $mbr = $mbrQ->get($mbrid);
   
   $postVars = $_POST;
-  $pageErrors = array();
+  $pageErrors = [];
   
   function checkerror($field, $err) {
     global $mbrid, $postVars, $pageErrors;

@@ -1,7 +1,7 @@
 <?php
 
 class SliceIter extends Iter {
-  function SliceIter($skip, $len, $iter) {
+  function __construct($skip, $len, $iter) {
     for ($i=0; $i < $skip; $i++) {
       $iter->skip();
     }

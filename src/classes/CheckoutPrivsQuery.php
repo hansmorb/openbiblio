@@ -19,8 +19,8 @@ class CheckoutPrivsQuery extends Query {
                           $material_cd, $classification)
            . "order by material_type, classification ";
     $rows = $this->exec($sql);
-    if (count($rows) != 1) {
-      Fatal::internalError("Wrong number of checkout privilege rows");
+    if ((is_countable($rows) ? count($rows) : 0) != 1) {
+      (new Fatal())->internalError("Wrong number of checkout privilege rows");
     }
     return $rows[0];
   }

@@ -27,7 +27,7 @@
   if (isset($_GET["materialCd"]) && $_GET["materialCd"] != "") {
     $materialCd= $_GET["materialCd"];
   } else {
-    Fatal::internalError('materialCd not set');
+    (new Fatal())->internalError('materialCd not set');
   }
 
   //    Played with printselect function

@@ -68,7 +68,7 @@
      			$error_found = true;
      			$pageErrors["common"] = "Invalid Logon. Maybe you don't have a Secret Word? Please ask the Staff!";
     		} else {
-  			$token = rand(-10000,10000);;
+  			$token = random_int(-10000,10000);;
 
  			#**************************************************************************
 			#*  Destroy form values and errors and reset signon variables

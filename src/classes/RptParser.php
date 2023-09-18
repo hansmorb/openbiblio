@@ -70,28 +70,28 @@ class RptParser {
 
     $this->fd = fopen($this->filename, 'rb');
     if ($this->fd === FALSE) {
-      return array(NULL, new ObibError('Cannot open file: '.$this->filename));
+      return [NULL, new ObibError('Cannot open file: '.$this->filename)];
     }
-    $this->_tokens = array();
+    $this->_tokens = [];
     $this->line = 0;
     $this->lex();
     return $this->parse_e();
   }
   function parse_e() {
-    $list = array();
+    $list = [];
     while($d = $this->p_decl()) {
       if (is_a($d, 'Error')) {
-        return array(NULL, $d);
+        return [NULL, $d];
       }
       array_push($list, $d);
     }
     if ($this->lat[0] == 'ERROR') {
-      return array(NULL, $this->lexerError());
+      return [NULL, $this->lexerError()];
     }
     if ($this->lat[0] != 'EOF') {
-      return array(NULL, $this->unexpectedToken());
+      return [NULL, $this->unexpectedToken()];
     }
-    return array($list, NULL);
+    return [$list, NULL];
   }
 
   function error($msg) {
@@ -125,10 +125,10 @@ class RptParser {
     # NOTE: Lines longer than 4096 bytes will mess things up.
     while ($line = fgets($this->fd, 4096)) {
       $this->line++;
-      if ($line == "\n" or $line == "\r\n" or $line == "\r" or $line{0} == '#') {
+      if ($line == "\n" or $line == "\r\n" or $line == "\r" or $line[0] == '#') {
         continue;
       }
-      if ($line{0} == '.') {
+      if ($line[0] == '.') {
         $this->_tokens = $this->getCmdTokens(trim(substr($line, 1)));
       } else {
         $this->_tokens = $this->getSqlTokens(trim($line));
@@ -138,65 +138,61 @@ class RptParser {
       }
     }
     if ($line === FALSE and !feof($this->fd)) {
-      return array('ERROR');
+      return ['ERROR'];
     }
-    return array('EOF');
+    return ['EOF'];
   }
   function getCmdTokens($str) {
-    $cmds = array('title', 'category', 'layout', 'column', 'parameters', 'sql',
-                  'order_by', 'session_id', 'string', 'date', 'group', 'select', 'item',
-                  'if_set', 'if_equal', 'if_not_equal',
-                  'foreach_parameter', 'foreach_word',
-                  'else', 'subselect', 'end', 'order_by_expr');
-    $list = array();
+    $cmds = ['title', 'category', 'layout', 'column', 'parameters', 'sql', 'order_by', 'session_id', 'string', 'date', 'group', 'select', 'item', 'if_set', 'if_equal', 'if_not_equal', 'foreach_parameter', 'foreach_word', 'else', 'subselect', 'end', 'order_by_expr'];
+    $list = [];
     while (!empty($str)) {
-      if ($str{0} == ' ' or $str{0} == "\t") {
+      if ($str[0] == ' ' or $str[0] == "\t") {
         $str = substr($str, 1);
         continue;
       }
-      if (ctype_alnum($str{0})) {
+      if (ctype_alnum($str[0])) {
         $w = '';
-        while (!empty($str) and (ctype_alnum($str{0}) or $str{0} == '_')) {
-          $w .= $str{0};
+        while (!empty($str) and (ctype_alnum($str[0]) or $str[0] == '_')) {
+          $w .= $str[0];
           $str = substr($str, 1);
         }
-        array_push($list, array('WORD', $w));
-      } else if ($str{0} == '"' or $str{0} == '\'') {
-        list($w, $str) = $this->getQuoted($str);
-        array_push($list, array('WORD', $w));
+        array_push($list, ['WORD', $w]);
+      } else if ($str[0] == '"' or $str[0] == '\'') {
+        [$w, $str] = $this->getQuoted($str);
+        array_push($list, ['WORD', $w]);
       } else {
-        array_push($list, array($str{0}));
+        array_push($list, [$str[0]]);
         $str = substr($str, 1);
       }
     }
     if ($list[0][0] == 'WORD' and in_array($list[0][1], $cmds)) {
-      $list[0] = array($list[0][1]);
+      $list[0] = [$list[0][1]];
     }
     return $list;
   }
   function getQuoted($str) {
     if (empty($str)) {
-      Fatal::internalError('getQuoted() called with empty $str');
+      (new Fatal())->internalError('getQuoted() called with empty $str');
     }
-    $q = $str{0};
+    $q = $str[0];
     $w = '';
     for ($n=1; $n < strlen($str); $n++) {
-      if ($str{$n} == $q) {
+      if ($str[$n] == $q) {
         break;
       }
-      if ($str{$n} == '\\') {
+      if ($str[$n] == '\\') {
         $n++;
         if ($n >= strlen($str)) {
           break;
         }
       }
-      $w .= $str{$n};
+      $w .= $str[$n];
     }
-    return array($w, substr($str, $n+1));
+    return [$w, substr($str, $n+1)];
   }
   function getSqlTokens($str) {
-    static $conversions = array('!' => '%!', '#' => '%N', '"' => '%q', '.' => '%I', '`' => '%i');
-    $list = array();
+    static $conversions = ['!' => '%!', '#' => '%N', '"' => '%q', '.' => '%I', '`' => '%i'];
+    $list = [];
     $sql = '';
     while (!empty($str)) {
       $p = strpos($str, "%");
@@ -219,22 +215,22 @@ class RptParser {
         $sql .= '%';
       } else {
         if (!empty($sql)) {
-          array_push($list, array('SQLCODE', $sql));
+          array_push($list, ['SQLCODE', $sql]);
           $sql = '';
         }
-        if (array_key_exists($ref{0}, $conversions)) {
-          $conv = $conversions[$ref{0}];
+        if (array_key_exists($ref[0], $conversions)) {
+          $conv = $conversions[$ref[0]];
           $ref = substr($ref, 1);
         } else {
           $conv = '%Q';
         }
-        array_push($list, array('PARAMREF', array($ref, $conv)));
+        array_push($list, ['PARAMREF', [$ref, $conv]]);
       }
     }
     # hack to force proper whitespace
     if (count($list) != 0 || strlen($sql) != 0) {
       $sql .= ' ';
-      array_push($list, array('SQLCODE', $sql));
+      array_push($list, ['SQLCODE', $sql]);
     }
     return $list;
   }
@@ -251,7 +247,7 @@ class RptParser {
         if ($this->lat[0] != 'WORD') {
           return $this->unexpectedToken('WORD');
         }
-        $decl = array($t, $this->lat[1]);
+        $decl = [$t, $this->lat[1]];
         $this->lex();
         return $decl;
       case 'layout':
@@ -267,7 +263,7 @@ class RptParser {
           return $list;
         }
         $list['name'] = $name;
-        return array($t, $list);
+        return [$t, $list];
       case 'parameters':
         $this->lex();
         $list = $this->p_param_decls();
@@ -278,7 +274,7 @@ class RptParser {
         if (is_a($result, 'Error')) {
           return $result;
         }
-        return array('parameters', $list);
+        return ['parameters', $list];
       case 'sql':
         $this->lex();
         return $this->p_sql_form();
@@ -287,7 +283,7 @@ class RptParser {
     }
   }
   function p_param_decls() {
-    $list = array();
+    $list = [];
     while (1) {
       if ($this->lat[0] == 'order_by') {
         $this->lex();
@@ -303,14 +299,14 @@ class RptParser {
         if (is_a($result, 'Error')) {
           return $result;
         }
-        $list[] = array('order_by', 'order_by', $params, $items);
+        $list[] = ['order_by', 'order_by', $params, $items];
       } elseif ($this->lat[0] == 'session_id') {
         $this->lex();
         $params = $this->p_params();
         if (is_a($params, 'Error')) {
           return $params;
         }
-        $list[] = array('session_id', 'session_id', $params);
+        $list[] = ['session_id', 'session_id', $params];
       } else {
         $d = $this->p_param_decl();
         if (is_a($d, 'Error')) {
@@ -324,7 +320,7 @@ class RptParser {
     return $list;
   }
   function p_param_decl() {
-    if (!in_array($this->lat[0], array('string', 'date', 'group', 'select'))) {
+    if (!in_array($this->lat[0], ['string', 'date', 'group', 'select'])) {
       return false;
     }
     $type = $this->lat[0];
@@ -341,7 +337,7 @@ class RptParser {
     switch ($type) {
       case 'string':
       case 'date':
-        return array($type, $name, $params);
+        return [$type, $name, $params];
       case 'group':
         $list = $this->p_param_decls();
         if (is_a($list, 'Error')) {
@@ -351,7 +347,7 @@ class RptParser {
         if (is_a($result, 'Error')) {
           return $result;
         }
-        return array('group', $name, $params, $list);
+        return ['group', $name, $params, $list];
       case 'select':
         $list = $this->p_items();
         if (is_a($list, 'Error')) {
@@ -361,13 +357,13 @@ class RptParser {
         if (is_a($result, 'Error')) {
           return $result;
         }
-        return array('select', $name, $params, $list);
+        return ['select', $name, $params, $list];
       default:
-        Fatal::internalError("Can't happen");
+        (new Fatal())->internalError("Can't happen");
     }
   }
   function p_items() {
-    $list = array();
+    $list = [];
     while (1) {
       if ($this->lat[0] == 'item') {
         $this->lex();
@@ -380,7 +376,7 @@ class RptParser {
         if (is_a($params, 'Error')) {
           return $params;
         }
-        array_push($list, array($value, $params));
+        array_push($list, [$value, $params]);
       } else if ($this->lat[0] == 'sql') {
         $this->lex();
         if ($this->lat[0] != 'SQLCODE') {
@@ -399,7 +395,7 @@ class RptParser {
         $q = new Query();
         $r = $q->select($sql);
         while ($row = $r->next()) {
-          array_push($list, array($row['value'], $row));
+          array_push($list, [$row['value'], $row]);
         }
       } else {
         break;
@@ -420,10 +416,10 @@ class RptParser {
     if (is_a($result, 'Error')) {
       return $result;
     }
-    return array('sql', array($exprs, $subs));
+    return ['sql', [$exprs, $subs]];
   }
   function p_sql_exprs() {
-    $list = array();
+    $list = [];
     while ($e = $this->p_sql_expr()) {
       if (is_a($e, 'Error')) {
         return $e;
@@ -437,11 +433,11 @@ class RptParser {
       case 'SQLCODE':
         $code = $this->lat[1];
         $this->lex();
-        return array('sqlcode', $code);
+        return ['sqlcode', $code];
       case 'PARAMREF':
-        list($name, $conv) = $this->lat[1];
+        [$name, $conv] = $this->lat[1];
         $this->lex();
-        return array('value', $name, $conv);
+        return ['value', $name, $conv];
       case 'if_set':
         $this->lex();
         if ($this->lat[0] != 'WORD') {
@@ -457,7 +453,7 @@ class RptParser {
         if (is_a($else, 'Error')) {
           return $else;
         }
-        return array('if_set', $name, $then, $else);
+        return ['if_set', $name, $then, $else];
       case 'if_equal':
       case 'if_not_equal':
         $type = $this->lat[0];
@@ -480,7 +476,7 @@ class RptParser {
         if (is_a($else, 'Error')) {
           return $else;
         }
-        return array($type, $name, $value, $then, $else);
+        return [$type, $name, $value, $then, $else];
       case 'foreach_parameter':
       case 'foreach_word':
         $type = $this->lat[0];
@@ -498,11 +494,11 @@ class RptParser {
         if (is_a($result, 'Error')) {
           return $result;
         }
-        return array($type, $name, $block);
+        return [$type, $name, $block];
       case 'order_by_expr':
         $tok = $this->lat[0];
         $this->lex();
-        return array($tok);
+        return [$tok];
       default:
         return false;
     }
@@ -515,7 +511,7 @@ class RptParser {
         return $list;
       }
     } else {
-      $list = array();
+      $list = [];
     }
     $result = $this->p_end();
     if (is_a($result, 'Error')) {
@@ -527,7 +523,7 @@ class RptParser {
     return $list;
   }
   function p_subselects() {
-    $list = array();
+    $list = [];
     while ($this->lat[0] == 'subselect') {
       $this->lex();
       if ($this->lat[0] != 'WORD') {
@@ -555,7 +551,7 @@ class RptParser {
     return true;
   }
   function p_words() {
-    $list = array();
+    $list = [];
     while ($this->lat[0] == 'WORD') {
       array_push($list, $this->lat[1]);
       $this->lex();
@@ -563,7 +559,7 @@ class RptParser {
     return $list;
   }
   function p_params() {
-    $params = array();
+    $params = [];
     while ($this->lat[0] == 'WORD') {
       $name = $this->lat[1];
       $this->lex();

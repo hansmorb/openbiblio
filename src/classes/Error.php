@@ -15,7 +15,7 @@
  * ending in '_e'.
  */
 class ObibError {
-  function ObibError($msg) {
+  function __construct($msg) {
     $this->msg = $msg;
   }
   function toStr() {

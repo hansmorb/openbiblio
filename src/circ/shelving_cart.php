@@ -19,15 +19,15 @@
     exit();
   }
 
-  if ( $_GET[barcodeNmbr] ) {
-         $barcode = trim($_GET[barcodeNmbr]);
+  if ( $_GET[\BARCODENMBR] ) {
+         $barcode = trim($_GET[\BARCODENMBR]);
   }
     else {
          $barcode = trim($_POST["barcodeNmbr"]);
   }
 
   $circQ = new CircQuery();
-  list($info, $err) = $circQ->shelving_cart_e($barcode);
+  [$info, $err] = $circQ->shelving_cart_e($barcode);
   if ($err) $err = $err->toStr();
   
   if ($err) {

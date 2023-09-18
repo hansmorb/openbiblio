@@ -20,7 +20,7 @@
 
   echo "Updating OpenBiblio tables, please wait...<br>\n";
   
-  list($notices, $error) = $upgradeQ->performUpgrade_e();
+  [$notices, $error] = $upgradeQ->performUpgrade_e();
   if ($error) {
     echo "<h1>Upgrade Failed</h1>";
     echo H($error->toStr());

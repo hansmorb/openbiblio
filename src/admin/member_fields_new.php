@@ -26,7 +26,7 @@
   #****************************************************************************
   #*  Validate data
   #****************************************************************************
-  $pageErrors = array();
+  $pageErrors = [];
   if (!isset($_POST['code']) or !$_POST['code']) {
     $pageErrors['code'] = 'This is a required field.';
   }
@@ -65,7 +65,7 @@
   #**************************************************************************
   require_once("../shared/header.php");
 ?>
-<?php echo $loc->getText("Member field, %desc%, has been added.", array('desc'=>$dm->getDescription()));?><br><br>
+<?php echo $loc->getText("Member field, %desc%, has been added.", ['desc'=>$dm->getDescription()]);?><br><br>
 <a href="../admin/member_fields_list.php"><?php echo $loc->getText("return to member fields list"); ?></a>
 
 <?php require_once("../shared/footer.php"); ?>

@@ -81,7 +81,7 @@
   $mbrQ->connect();
   $dupBarcode = $mbrQ->DupBarcode($mbr->getBarcodeNmbr(),$mbr->getMbrid());
   if ($dupBarcode) {
-    $pageErrors["barcodeNmbr"] = $loc->getText("mbrDupBarcode",array("barcode"=>$mbr->getBarcodeNmbr()));
+    $pageErrors["barcodeNmbr"] = $loc->getText("mbrDupBarcode",["barcode"=>$mbr->getBarcodeNmbr()]);
     $_SESSION["postVars"] = $_POST;
     $_SESSION["pageErrors"] = $pageErrors;
     header("Location: ../circ/mbr_edit_form.php");

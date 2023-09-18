@@ -17,14 +17,7 @@
   #****************************************************************************
   if (!OBIB_DEMO_FLG) {
 
-    $pages = array(
-      'opac'=>'../opac/index.php',
-      'home'=>'../home/index.php',
-      'circulation'=>'../circ/index.php',
-      'cataloging'=>'../catalog/index.php',
-      'admin'=>'../admin/index.php',
-      'reports'=>'../reports/index.php',
-    );
+    $pages = ['opac'=>'../opac/index.php', 'home'=>'../home/index.php', 'circulation'=>'../circ/index.php', 'cataloging'=>'../catalog/index.php', 'admin'=>'../admin/index.php', 'reports'=>'../reports/index.php'];
   $returnPage = $pages[$tab];
   $_SESSION["returnPage"] = $returnPage;
 

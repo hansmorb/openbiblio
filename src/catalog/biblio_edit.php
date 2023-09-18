@@ -35,7 +35,7 @@ if (!isset($_REQUEST['posted'])) {
     $restrictInDemo = true;
     require_once("../shared/logincheck.php");
     $biblio = postVarsToBiblio($postVars);
-    $pageErrors = array();
+    $pageErrors = [];
     if (!$biblio->validateData()) {
       $pageErrors = array_merge($pageErrors, biblioToPageErrors($biblio));
     }
@@ -98,7 +98,7 @@ function postVarsToBiblio($post) {
   return $biblio;
 }
 function biblioToPageErrors($biblio) {
-  $pageErrors = array();
+  $pageErrors = [];
   $pageErrors["callNmbr1"] = $biblio->getCallNmbrError();
   $biblioFlds = $biblio->getBiblioFields();
   foreach($biblio->getBiblioFields() as $index => $field) {
@@ -114,7 +114,7 @@ function customFieldErrors($biblio) {
   $matQ->connect();
   $rows = $matQ->get($biblio->getMaterialCd());
   $matQ->close();
-  $errors = array();
+  $errors = [];
   $fields = $biblio->getBiblioFields();
   foreach ($rows as $row) {
     $idx = sprintf('%03d%s', $row['tag'], $row['subfieldCd']);
@@ -141,7 +141,7 @@ function updateBiblio($biblio) {
   }
   $biblioQ->close();
 }
-function showForm($postVars, $pageErrors=array()) {
+function showForm($postVars, $pageErrors=[]) {
   global $tab, $nav, $loc;
   $helpPage = "biblioEdit";
   $focus_form_name = "editbiblioform";

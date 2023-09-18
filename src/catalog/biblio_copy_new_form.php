@@ -40,7 +40,7 @@
 ?>
 
 <font class="small">
-<?php echo $loc->getText("catalogFootnote",array("symbol"=>"*")); ?>
+<?php echo $loc->getText("catalogFootnote",["symbol"=>"*"]); ?>
 </font>
 
 <form name="newCopyForm" method="POST" action="../catalog/biblio_copy_new.php">

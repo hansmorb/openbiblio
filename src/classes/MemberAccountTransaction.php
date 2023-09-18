@@ -14,19 +14,19 @@
  ******************************************************************************
  */
 class MemberAccountTransaction {
-  var $_mbrid = "";
-  var $_transid = "";
-  var $_createDt = "";
-  var $_createUserid = "";
-  var $_transactionTypeCd = "";
-  var $_transactionTypeDesc = "";
-  var $_amount = "";
-  var $_amountError = "";
-  var $_description = "";
-  var $_descriptionError = "";
-  var $_loc;
+  public $_mbrid = "";
+  public $_transid = "";
+  public $_createDt = "";
+  public $_createUserid = "";
+  public $_transactionTypeCd = "";
+  public $_transactionTypeDesc = "";
+  public $_amount = "";
+  public $_amountError = "";
+  public $_description = "";
+  public $_descriptionError = "";
+  public $_loc;
 
-  function MemberAccountTransaction () {
+  function __construct () {
     $this->_loc = new Localize(OBIB_LOCALE,"classes");
   }
 

@@ -48,7 +48,7 @@
 
 <input type="hidden" name="posted" value="1" />
 <font class="small">
-<?php echo $loc->getText("catalogFootnote",array("symbol"=>"*")); ?>
+<?php echo $loc->getText("catalogFootnote",["symbol"=>"*"]); ?>
 </font>
 
 <table class="primary">

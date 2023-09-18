@@ -6,14 +6,14 @@
 /* For when an error applies to a particular form or DB field */
 class FieldError extends ObibError {
   /* public */
-  var $field;
-  function FieldError($field, $msg) {
-    parent::ObibError($msg);
+  public $field;
+  function __construct($field, $msg) {
+    parent::__construct($msg);
     $this->field = $field;
   }
   function listExtract($errors) {
-    $msgs = array();
-    $l = array();
+    $msgs = [];
+    $l = [];
     foreach ($errors as $e) {
       if (isset($e->field)) {
         $l[$e->field][] = $e->toStr();
@@ -25,10 +25,10 @@ class FieldError extends ObibError {
     foreach ($l as $k=>$v) {
       $l[$k] = implode(' ', $v);
     }
-    return array($msg, $l);
+    return [$msg, $l];
   }
   function backToForm($url, $errors) {
-    list($msg, $fielderrs) = FieldError::listExtract($errors);
+    [$msg, $fielderrs] = FieldError::listExtract($errors);
     $_SESSION["postVars"] = mkPostVars();
     $_SESSION["pageErrors"] = $fielderrs;
     if(strchr($url, '?')) {

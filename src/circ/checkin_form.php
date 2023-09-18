@@ -2,7 +2,7 @@
 /* This file is part of a copyrighted work; it is distributed with NO WARRANTY.
  * See the file COPYRIGHT.html for more details.
  */
- 
+
   require_once("../shared/common.php");
   $tab = "circulation";
   $nav = "checkin";
@@ -62,14 +62,9 @@ function checkin(massCheckinFlg)
       $memberQ = new MemberQuery;
       $mbr = $memberQ->get($_GET['mbrid']);
       echo '<p>';
-      echo $loc->getText("Checked in %barcode% for ", array(
-        'barcode'=>htmlspecialchars($_GET['barcode']),
-      ));
+      echo $loc->getText("Checked in %barcode% for ", ['barcode'=>htmlspecialchars($_GET['barcode'])]);
       echo '<a href="../circ/mbr_view.php?mbrid='.HURL($mbr->getMbrid()).'&amp;reset=Y">';
-      echo $loc->getText("%fname% %lname%", array(
-        'fname'=>$mbr->getFirstName(),
-        'lname'=>$mbr->getLastName(),
-      ));
+      echo $loc->getText("%fname% %lname%", ['fname'=>$mbr->getFirstName(), 'lname'=>$mbr->getLastName()]);
       echo '</a>.';
       echo '</p>';
       if (isset($_GET['late']) and $_GET['late']) {
@@ -80,7 +75,7 @@ function checkin(massCheckinFlg)
       $balMsg = "";
       if ($balance > 0) {
         $balText = moneyFormat($balance,2);
-        $balMsg = "<font class=\"error\">".$loc->getText("mbrViewBalMsg",array("bal"=>$balText))."</font><br><br>";
+        $balMsg = "<font class=\"error\">".$loc->getText("mbrViewBalMsg",["bal"=>$balText])."</font><br><br>";
       }
       echo $balMsg;
       /* Neu: Prüfe ob die Nutzungsgebuehr noch aktuell oder abgelaufen ist */
@@ -118,13 +113,13 @@ function checkin(massCheckinFlg)
                       $lYears = $lYear2 - $lYear1 - $lCarry;
 
 		      $monthlate=$lMonths+1+12*$lYears;
-		      $overMsg = "<font class=\"error\">".$loc->getText("checkinEndErr",array("monthlate"=>$monthlate))."</font><br><br>";
+		      $overMsg = "<font class=\"error\">".$loc->getText("checkinEndErr",["monthlate"=>$monthlate])."</font><br><br>";
 		      if (($lDays==0) and ($lMonths==0) and ($lYears==0)) $overMsg="";
 	      }
       }
       echo $overMsg;
     } else {
-      echo '<p>'.$loc->getText("Checked in %barcode%.", array('barcode'=>htmlspecialchars($_GET['barcode']))).'</p>';
+      echo '<p>'.$loc->getText("Checked in %barcode%.", ['barcode'=>htmlspecialchars($_GET['barcode'])]).'</p>';
     }
   }
 ?>

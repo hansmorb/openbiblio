@@ -11,19 +11,19 @@ class Rpt {
   function load_e($filename) {
     $this->_title = $filename;
     $this->_category = 'Misc.';
-    $this->_layouts = array();
-    $this->_columns = array();
-    $this->_paramdefs = array();
-    $this->_code = array();
+    $this->_layouts = [];
+    $this->_columns = [];
+    $this->_paramdefs = [];
+    $this->_code = [];
     $this->_interp = NULL;
 
     $parser = new RptParser;
-    list($decls, $err) = $parser->load_e($filename);
+    [$decls, $err] = $parser->load_e($filename);
     if ($err) {
       return $err;
     }
     foreach ($decls as $decl) {
-      list($name, $value) = $decl;
+      [$name, $value] = $decl;
       switch ($name) {
         case 'title':
           $this->_title = $value;
@@ -44,7 +44,7 @@ class Rpt {
           array_push($this->_code, $value);
           break;
         default:
-          Fatal::internalError("Can't happen");
+          (new Fatal())->internalError("Can't happen");
       }
     }
     return NULL;

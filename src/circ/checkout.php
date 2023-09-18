@@ -30,7 +30,7 @@
   $mbr = $mbrQ->get($mbrid);
   
   $postVars = $_POST;
-  $pageErrors = array();
+  $pageErrors = [];
   
   function checkerror($field, $err) {
     global $mbrid, $postVars, $pageErrors;
@@ -45,7 +45,7 @@
   
   $circQ = new CircQuery;
   if(isset($_POST['date_from']) && isset($_POST['dueDate']) && $_POST['date_from'] == 'override'){
-    list($dueDate, $err) = Date::read_e($_POST['dueDate']);
+    [$dueDate, $err] = (new Date())->read_e($_POST['dueDate']);
     checkerror('dueDate', $err);
     $_SESSION['due_date_override'] = $_POST['dueDate'];
     $err = $circQ->checkout_due_e($mbr->getBarcodeNmbr(), $barcode, $dueDate);

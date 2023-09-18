@@ -42,7 +42,7 @@
   #**************************************************************************
   require_once("../shared/header.php");
 ?>
-<?php echo $loc->getText("Classification type, %desc%, has been deleted.", array('desc'=>$description));?><br><br>
+<?php echo $loc->getText("Classification type, %desc%, has been deleted.", ['desc'=>$description]);?><br><br>
 <a href="../admin/mbr_classify_list.php"><?php echo $loc->getText("return to member classification list"); ?></a>
 
 <?php require_once("../shared/footer.php"); ?>

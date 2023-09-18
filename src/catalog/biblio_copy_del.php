@@ -51,7 +51,7 @@
   #**************************************************************************
   #*  Show success message
   #**************************************************************************
-  $msg = $loc->getText("biblioCopyDelSuccess",array("barcode"=>$barcode));
+  $msg = $loc->getText("biblioCopyDelSuccess",["barcode"=>$barcode]);
   header("Location: ../shared/biblio_view.php?bibid=".U($bibid)."&msg=".U($msg));
   exit();
 ?>

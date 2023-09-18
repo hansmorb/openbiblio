@@ -24,7 +24,7 @@
   $circQ = new CircQuery;
   $biblioQ = new BiblioSearchQuery();
   if (!$biblioQ->doQuery(OBIB_STATUS_OUT, $mbrid))
-    Fatal::dbError($biblioQ->getSQL(), 'doQuery failed', $biblioQ->getDbError());
+    (new Fatal())->dbError($biblioQ->getSQL(), 'doQuery failed', $biblioQ->getDbError());
     
   while ($biblio = $biblioQ->fetchRow()) {
     $err = $circQ->checkout_e($mbr->getBarcodeNmbr(), $biblio->getBarcodeNmbr());

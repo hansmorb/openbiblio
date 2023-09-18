@@ -18,7 +18,7 @@ require_once("../classes/Date.php");
 require_once("../classes/Localize.php");
 
 class CircQuery extends Query {
-	function CircQuery() {
+	function __construct() {
 		$this->Query();
 		$this->_loc = new Localize(OBIB_LOCALE, 'classes');
 	}
@@ -29,14 +29,14 @@ class CircQuery extends Query {
 		return $ret;
 	}
 	function _checkout_e($mbcode, $bcode, $due, $date, $force) {
-		list($date, $err) = Date::read_e('today');
+		[$date, $err] = (new Date())->read_e('today');
 		if ($err)
-			Fatal::internalError("Unexpected date error: ".$err);
+			(new Fatal())->internalError("Unexpected date error: ".$err);
 		$earliest = $latest = time();
 		$mbrQ = new MemberQuery();
 		$mbr = $mbrQ->maybeGetByBarcode($mbcode);
 		if (!$mbr)
-			return new ObibError($this->_loc->getText("Bad member barcode: %bcode%", array('bcode'=>$mbcode)));
+			return new ObibError($this->_loc->getText("Bad member barcode: %bcode%", ['bcode'=>$mbcode]));
 		$mbrid = $mbr->getMbrid();
 		if (!$force && OBIB_BLOCK_CHECKOUTS_WHEN_FINES_DUE) {
 			$acctQ = new MemberAccountQuery();
@@ -52,44 +52,44 @@ class CircQuery extends Query {
                 $copyQ = new BiblioCopyQuery();
                 $copy = $copyQ->maybeGetByBarcode($bcode);
 		if (!$copy)
-			return new ObibError($this->_loc->getText("Bad copy barcode: %bcode%", array('bcode'=>$bcode)));
+			return new ObibError($this->_loc->getText("Bad copy barcode: %bcode%", ['bcode'=>$bcode]));
 		$fee2 = $copyQ->getDailyLateFee($copy);
 		if ($copy->getStatusCd() == OBIB_STATUS_OUT) {
 			if ($copy->getMbrid() == $mbrid) {
 				# Renewal
 				$reachedLimit = $copyQ->hasReachedRenewalLimit($mbrid, $mbr->getClassification(), $copy);
 				if(!$force && $reachedLimit)
-					return new ObibError($this->_loc->getText("Item %bcode% has reached its renewal limit.", array('bcode'=>$bcode)));
+					return new ObibError($this->_loc->getText("Item %bcode% has reached its renewal limit.", ['bcode'=>$bcode]));
 				else if (!$force && ($copy->getDaysLate() > 0) && ($fee2>0))
-					return new ObibError($this->_loc->getText("Item %bcode% is late and cannot be renewed.", array('bcode'=>$bcode)));
+					return new ObibError($this->_loc->getText("Item %bcode% is late and cannot be renewed.", ['bcode'=>$bcode]));
 				else
 					{
 					$holdQ = new BiblioHoldQuery();
                 			$hold = $holdQ->maybeGetFirstHold($copy->getBibid(), $copy->getCopyid());
-                			if ($hold) return new ObibError($this->_loc->getText("Item %bcode% is on hold.", array('bcode'=>$bcode)));
+                			if ($hold) return new ObibError($this->_loc->getText("Item %bcode% is on hold.", ['bcode'=>$bcode]));
 					$copy->setRenewalCount($copy->getRenewalCount() + 1);
 					}
 			} else if ($force) {
-				list($dummy, $err) = $this->shelving_cart_e($bcode, $date, $force);
+				[$dummy, $err] = $this->shelving_cart_e($bcode);
 				if ($err)
 					return $err;
 				$copy = $copyQ->maybeGetByBarcode($bcode);
 				if (!$copy)
-					Fatal::internalError("Copy disappeared mysteriously.");
+					(new Fatal())->internalError("Copy disappeared mysteriously.");
 			} else
 				return new ObibError($this->_loc->getText("Item %bcode% is already checked out to another member.",
-					array('bcode'=>$bcode)));
+					['bcode'=>$bcode]));
 		} 
 		else
 		{
-			return new ObibError($this->_loc->getText("Item %bcode% isn't out and cannot be renewed.", array('bcode'=>$bcode)));
+			return new ObibError($this->_loc->getText("Item %bcode% isn't out and cannot be renewed.", ['bcode'=>$bcode]));
 		}
 		$days = $copyQ->getDaysDueBack($copy);
 		$oldtime = strtotime($copy->getStatusBeginDt());
 		if ($oldtime > $latest)
-			return new ObibError($this->_loc->getText("Can't change status to an earlier date on item %bcode%.", array('bcode'=>$bcode)));
+			return new ObibError($this->_loc->getText("Can't change status to an earlier date on item %bcode%.", ['bcode'=>$bcode]));
 		else if ($oldtime == $latest)
-			return new ObibError($this->_loc->getText("Can't change status more than once per second on item %bcode%." , array('bcode'=>$bcode)));
+			return new ObibError($this->_loc->getText("Can't change status more than once per second on item %bcode%." , ['bcode'=>$bcode]));
 		else if ($oldtime < $earliest)
 			$time = date('Y-m-d H:i:s', $earliest);
 		else
@@ -99,11 +99,11 @@ class CircQuery extends Query {
 		$copy->setMbrid($mbrid);
 		$copy->setStatusBeginDt($time);
 		if($due === NULL)
-			$copy->setDueBackDt(Date::addDays($date, $days));
+			$copy->setDueBackDt((new Date())->addDays($date, $days));
 		else
 			$copy->setDueBackDt($due);
 		if (!$copyQ->updateStatus($copy))
-			Fatal::InternalError("Impossible copyQ update error.");
+			(new Fatal())->InternalError("Impossible copyQ update error.");
 		
 		$hist = new BiblioStatusHist();
 		$hist->setBibid($copy->getBibid());
@@ -117,7 +117,7 @@ class CircQuery extends Query {
 		$histQ->insert($hist);
 		if ($mbr->getMembershipEnd()!="0000-00-00") {
 			if($due === NULL)
-				$back=Date::addDays($date, $days);
+				$back=(new Date())->addDays($date, $days);
 			else
 				$back=$due;
 			if (strtotime($mbr->getMembershipEnd())<strtotime($back)) {

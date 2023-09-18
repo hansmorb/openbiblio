@@ -10,15 +10,7 @@
   $mbrClassifyDm = $dmQ->getAssoc('mbr_classify_dm');
   $customFields = $dmQ->getAssoc('member_fields_dm');
   $dmQ->close();
-  $fields = array(
-    "mbrFldsCardNmbr" => inputField('text', "barcodeNmbr", $mbr->getBarcodeNmbr()),
-    "mbrFldsFirstName" => inputField('text', "firstName", $mbr->getFirstName()),
-    "mbrFldsLastName" => inputField('text', "lastName", $mbr->getLastName()),
-    "Mailing Address:" => inputField('textarea', "address", $mbr->getAddress()),
-    "mbrFldsEmail" => inputField('text', "email", $mbr->getEmail()),
-    "mbrFldsHomePhone" => inputField('text', "homePhone", $mbr->getHomePhone()),
-    "mbrFldsWorkPhone" => inputField('text', "workPhone", $mbr->getWorkPhone()),
-  );
+  $fields = ["mbrFldsCardNmbr" => inputField('text', "barcodeNmbr", $mbr->getBarcodeNmbr()), "mbrFldsFirstName" => inputField('text', "firstName", $mbr->getFirstName()), "mbrFldsLastName" => inputField('text', "lastName", $mbr->getLastName()), "Mailing Address:" => inputField('textarea', "address", $mbr->getAddress()), "mbrFldsEmail" => inputField('text', "email", $mbr->getEmail()), "mbrFldsHomePhone" => inputField('text', "homePhone", $mbr->getHomePhone()), "mbrFldsWorkPhone" => inputField('text', "workPhone", $mbr->getWorkPhone())];
   
   foreach ($customFields as $name => $title) {
     $fields[$title.':'] = inputField('text', 'custom_'.$name, $mbr->getCustom($name));

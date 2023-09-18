@@ -27,7 +27,7 @@
 ?>
 <center>
 <form name="delclassificationform" method="POST" action="../admin/mbr_classify_del.php?code=<?php echo HURL($code);?>&amp;desc=<?php echo HURL($description);?>">
-<?php echo $loc->getText("Are you sure you want to delete classification '%desc%'?", array('desc'=>$description)); ?><br><br>
+<?php echo $loc->getText("Are you sure you want to delete classification '%desc%'?", ['desc'=>$description]); ?><br><br>
       <input type="submit" value="  <?php echo $loc->getText("adminDelete"); ?>  " class="button">
       <input type="button" onClick="self.location='../admin/mbr_classify_list.php'" value="  <?php echo $loc->getText("adminCancel"); ?>  " class="button">
 </form>

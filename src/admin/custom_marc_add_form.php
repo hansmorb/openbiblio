@@ -18,8 +18,8 @@
   require_once("../classes/Localize.php");
   $loc = new Localize(OBIB_LOCALE,$tab);
 
-  $postVars = array();
-  $pageErrors = array();
+  $postVars = [];
+  $pageErrors = [];
   if (isset($_GET["materialCd"])) {
     $materialCd = $_GET["materialCd"];
     $postVars["materialCd"] = $materialCd;
@@ -35,7 +35,7 @@
     $materialCd = $postVars['materialCd'];
   }
   if (!isset($materialCd) || $materialCd == "") {
-    Fatal::internalError('no material code set');
+    (new Fatal())->internalError('no material code set');
   }
   if (isset($_GET["tag"])) {
     $postVars["tag"] = $_GET["tag"];

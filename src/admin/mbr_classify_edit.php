@@ -61,7 +61,7 @@
   #**************************************************************************
   require_once("../shared/header.php");
 ?>
-<?php echo $loc->getText("Classification type, %desc%, has been updated.", array('desc'=>$dm->getDescription()));?><br><br>
+<?php echo $loc->getText("Classification type, %desc%, has been updated.", ['desc'=>$dm->getDescription()]);?><br><br>
 <a href="../admin/mbr_classify_list.php"><?php echo $loc->getText("return to member classification list"); ?></a>
 
 <?php require_once("../shared/footer.php"); ?>

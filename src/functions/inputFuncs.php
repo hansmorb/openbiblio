@@ -13,7 +13,7 @@ function inputField($type, $name, $value="", $attrs=NULL, $data=NULL) {
   if (isset($_SESSION['postVars'])) {
     $postVars = $_SESSION['postVars'];
   } else {
-    $postVars = array();
+    $postVars = [];
   }
   if (isset($postVars[$name])) {
     $value = $postVars[$name];
@@ -21,13 +21,13 @@ function inputField($type, $name, $value="", $attrs=NULL, $data=NULL) {
   if (isset($_SESSION['pageErrors'])) {
     $pageErrors = $_SESSION['pageErrors'];
   } else {
-    $pageErrors = array();
+    $pageErrors = [];
   }
   if (isset($pageErrors[$name])) {
     $s .= '<font class="error">'.H($pageErrors[$name]).'</font><br />';
   }
   if (!$attrs) {
-    $attrs = array();
+    $attrs = [];
   }
   if (!isset($attrs['onChange'])) {
     $attrs['onChange'] = 'modified=true';
@@ -91,7 +91,7 @@ function dmSelect($table, $name, $value="", $all=FALSE, $attrs=NULL) {
   $dms = $dmQ->get($table);
   $dmQ->close();
   $default = "";
-  $options = array();
+  $options = [];
   if ($all) {
     $options['all'] = 'All';
   }
@@ -121,9 +121,7 @@ function dmSelect($table, $name, $value="", $all=FALSE, $attrs=NULL) {
 function printInputText($fieldName,$size,$max,&$postVars,&$pageErrors,$visibility = "visible") {
   $_SESSION['postVars'] = $postVars;
   $_SESSION['pageErrors'] = $pageErrors;
-  $attrs = array('size'=>$size,
-                 'maxlength'=>$max,
-                 'style'=>"visibility: $visibility");
+  $attrs = ['size'=>$size, 'maxlength'=>$max, 'style'=>"visibility: $visibility"];
   echo inputField('text', $fieldName, '', $attrs);
 }
 
@@ -136,7 +134,7 @@ function printInputText($fieldName,$size,$max,&$postVars,&$pageErrors,$visibilit
  */
 function printSelect($fieldName,$domainTable,&$postVars,$disabled=FALSE){
   $_SESSION['postVars'] = $postVars;
-  $attrs = array();
+  $attrs = [];
   if ($disabled) {
     $attrs['disabled'] = '1';
   }

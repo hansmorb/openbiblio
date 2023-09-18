@@ -9,7 +9,7 @@
   require_once("../classes/MaterialFieldQuery.php");
 
   if (!isset($_GET["xref_id"])) {
-    Fatal::internalError('xfref_id not set');
+    (new Fatal())->internalError('xfref_id not set');
   }
   
   $matQ = new MaterialFieldQuery;

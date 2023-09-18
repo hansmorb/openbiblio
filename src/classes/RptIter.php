@@ -5,9 +5,9 @@
  
 class RptIter extends Iter {
   # These are private.
-  var $params;
-  var $iter;
-  var $subselects;
+  public $params;
+  public $iter;
+  public $subselects;
   # $sqls is a list of tuples of array($code, $subselects).
   # $code contains the code elements which construct a single
   # SQL query.  $subselects is a list of lists of code elements.  Each
@@ -45,11 +45,11 @@ class RptIter extends Iter {
   #	array('order_by_expr')
   #		An appropriate SQL ORDER BY clause is appended to
   #		the query at this point.
-  function RptIter($sqls, $params) {
+  function __construct($sqls, $params) {
     $this->params = $params;
     $this->q = new Query();
     foreach ($sqls as $s) {
-      list($code, $subs) = $s;
+      [$code, $subs] = $s;
       $sql = $this->_exec($code, $params);
       # I don't like having to differentiate selects here.  It might be
       # better for the Rpt syntax to indicate whether a query is expected
@@ -79,9 +79,9 @@ class RptIter extends Iter {
     }
     foreach ($this->subselects as $name => $sql) {
       if ($sql[0] != 'sql') {
-        Fatal::internalError('Broken RPT code structure');
+        (new Fatal())->internalError('Broken RPT code structure');
       }
-      $iter = new RptIter(array($sql[1]), $scope);
+      $iter = new RptIter([$sql[1]], $scope);
       $row[$name] = $iter->toArray();
     }
     return $row;
@@ -91,16 +91,16 @@ class RptIter extends Iter {
     foreach ($code as $c) {
       switch ($c[0]) {
         case 'sqlcode':
-          list( , $sql) = $c;
+          [, $sql] = $c;
           $query .= $sql;
           break;
         case 'value':
-          list( , $name, $conv) = $c;
-          list($type, $value) = $scope->getFirst($name);
+          [, $name, $conv] = $c;
+          [$type, $value] = $scope->getFirst($name);
           $query .= $this->q->mkSQL($conv, $value);
           break;
         case 'if_set':
-          list( , $name, $then, $else) = $c;
+          [, $name, $then, $else] = $c;
           if ($scope->exists($name)) {
             $query .= $this->_exec($then, $scope);
           } else {
@@ -108,11 +108,11 @@ class RptIter extends Iter {
           }
           break;
         case 'if_equal':
-          list( , $name, $value, $then, $else) = $c;
+          [, $name, $value, $then, $else] = $c;
           if (!$scope->exists($name)) {
             $query .= $this->_exec($else, $scope);
           } else {
-            list($t, $v) = $scope->getFirst($name);
+            [$t, $v] = $scope->getFirst($name);
             if ($v == $value) {
               $query .= $this->_exec($then, $scope);
             } else {
@@ -121,11 +121,11 @@ class RptIter extends Iter {
           }
           break;
         case 'if_not_equal':
-          list( , $name, $value, $then, $else) = $c;
+          [, $name, $value, $then, $else] = $c;
           if (!$scope->exists($name)) {
             $query .= $this->_exec($then, $scope);
           } else {
-            list($t, $v) = $scope->getFirst($name);
+            [$t, $v] = $scope->getFirst($name);
             if ($v != $value) {
               $query .= $this->_exec($then, $scope);
             } else {
@@ -135,22 +135,22 @@ class RptIter extends Iter {
           break;
         case 'foreach_parameter':
         case 'foreach_word':
-          list($type, $name, $block) = $c;
+          [$type, $name, $block] = $c;
           if ($type == 'foreach_parameter') {
             $vlist = $scope->getList($name);
           } else {
             include_once("../classes/Search.php");
-            list($t, $v) = $scope->getFirst($name);
+            [$t, $v] = $scope->getFirst($name);
             if ($t != "string") {
-              Fatal::internalError('$t != "string"');
+              (new Fatal())->internalError('$t != "string"');
             }
-            $vlist = array();
-            foreach (Search::explodeQuoted($v) as $w) {
-              $vlist[] = array('string', $w);
+            $vlist = [];
+            foreach ((new Search())->explodeQuoted($v) as $w) {
+              $vlist[] = ['string', $w];
             }
           }
           foreach ($vlist as $v) {
-            list($type, $value) = $v;
+            [$type, $value] = $v;
             $s = $scope->copy();
             $s->set($name, $type, $value);
             $query .= $this->_exec($block, $s);
@@ -158,15 +158,15 @@ class RptIter extends Iter {
           break;
         case 'order_by_expr':
           if ($v = $scope->getFirst('order_by')) {
-            list($type, $value, $raw) = $v;
+            [$type, $value, $raw] = $v;
             if ($type != "order_by") {
-              Fatal::internalError('$type != "order_by"');
+              (new Fatal())->internalError('$type != "order_by"');
             }
             $query .= 'order by '.$value.' ';
           }
           break;
         default:
-          Fatal::internalError("Can't happen");
+          (new Fatal())->internalError("Can't happen");
           break;
       }
     }

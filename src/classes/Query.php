@@ -9,51 +9,50 @@ require_once("../classes/DbIter.php");
 require_once("../classes/DbOld.php");
 
 class Query {
-  var $_link;
+  public $_link;
 
   /* This constructor will never do more than call connect_e() and throw a
    * fatal error if it fails.  If you want to catch the error, subclass Query and
    * call connect_e() yourself.
    */
-  function Query() {
+  function __construct() {
     $e = $this->connect_e();
     if ($e) {
-      Fatal::dbError($e->sql, $e->msg, $e->dberror);
+      (new Fatal())->dbError($e->sql, $e->msg, $e->dberror);
     }
   }
   function connect_e() {
-    list($this->_link, $e) = Query::_connect_e();
+    [$this->_link, $e] = (new Query())->_connect_e();
     return $e;
   }
   /* This static method shares the actual DBMS connection
    * with all Query instances.
    */
   function _connect_e() {
-    $link = QueryAny::db();
+    $link = (new QueryAny())->db();
     if ($link->error_is()) {
-      return array(NULL, $link->error_get());
+      return [NULL, $link->error_get()];
     }
-    return array($link, NULL);
+    return [$link, NULL];
   }
 
   function act($sql) {
     $results = $this->_act($sql);
     if (!is_bool($results)) {
-      Fatal::dbError($sql, "Action query returned results.", 'No DBMS error.');
+      (new Fatal())->dbError($sql, "Action query returned results.", 'No DBMS error.');
     }
   }
   function select($sql) {
     $results = $this->_act($sql);
     if (is_bool($results)) {
-      Fatal::dbError($sql, "Select did not return results.", 'No DBMS error.');
+      (new Fatal())->dbError($sql, "Select did not return results.", 'No DBMS error.');
     }
     return new DbIter($results);
   }
   function select1($sql) {
     $r = $this->select($sql);
     if ($r->count() != 1) {
-      Fatal::dbError($sql, 'Wrong number of result rows: expected 1, got '.$r->count(),
-                     'No DBMS Error');
+      (new Fatal())->dbError($sql, 'Wrong number of result rows: expected 1, got '.$r->count(), 'No DBMS Error');
     } else {
       return $r->next();
     }
@@ -63,19 +62,18 @@ class Query {
     if ($r->count() == 0) {
       return NULL;
     } else if ($r->count() != 1) {
-      Fatal::dbError($sql, 'Wrong number of result rows: expected 0 or 1, got '.$r->count(),
-                     'No DBMS Error');
+      (new Fatal())->dbError($sql, 'Wrong number of result rows: expected 0 or 1, got '.$r->count(), 'No DBMS Error');
     } else {
       return $r->next();
     }
   }
   function _act($sql) {
     if (!$this->_link) {
-      Fatal::internalError('Tried to make database query before connection.');
+      (new Fatal())->internalError('Tried to make database query before connection.');
     }
     $r = $this->_link->query($sql);
     if ($r === false) {
-      Fatal::dbError($sql, 'Database query failed', $this->_link->my_error());
+      (new Fatal())->dbError($sql, 'Database query failed', $this->_link->my_error());
     }
     return $r;
   }
@@ -100,7 +98,7 @@ class Query {
   function lock() {
     global $_Query_lock_depth;
     if ($_Query_lock_depth < 0) {
-      Fatal::internalError('Negative lock depth');
+      (new Fatal())->internalError('Negative lock depth');
     }
     if ($_Query_lock_depth == 0) {
       $row = $this->select1($this->mkSQL('select get_lock(%Q, %N) as locked',
@@ -114,7 +112,7 @@ class Query {
   function unlock() {
     global $_Query_lock_depth;
     if ($_Query_lock_depth <= 0) {
-      Fatal::internalError('Tried to unlock an unlocked database.');
+      (new Fatal())->internalError('Tried to unlock an unlocked database.');
     }
     $_Query_lock_depth--;
     if ($_Query_lock_depth == 0) {
@@ -156,7 +154,7 @@ class Query {
   function mkSQL() {
     $n = func_num_args();
     if ($n < 1) {
-      Fatal::internalError('Not enough arguments given to mkSQL().');
+      (new Fatal())->internalError('Not enough arguments given to mkSQL().');
     }
     $i = 1;
     $SQL = "";
@@ -169,13 +167,13 @@ class Query {
       }
       $SQL .= substr($fmt, 0, $p);
       if (strlen($fmt) < $p+2) {
-        Fatal::internalError('Bad mkSQL() format string.');
+        (new Fatal())->internalError('Bad mkSQL() format string.');
       }
       if ($fmt[$p+1] == '%') {
         $SQL .= "%";
       } else {
         if ($i >= $n) {
-          Fatal::internalError('Not enough arguments given to mkSQL().');
+          (new Fatal())->internalError('Not enough arguments given to mkSQL().');
         }
         $arg = func_get_arg($i++);
         switch ($fmt[$p+1]) {
@@ -191,7 +189,7 @@ class Query {
           }
           break;
         case 'C':
-          $a = array();
+          $a = [];
           foreach (explode('.', $arg) as $ident) {
             array_push($a, '`'.$this->_ident($ident).'`');
           }
@@ -213,13 +211,13 @@ class Query {
           $SQL .= $this->_link->real_escape_string($arg);
           break;
         default:
-          Fatal::internalError('Bad mkSQL() format string.');
+          (new Fatal())->internalError('Bad mkSQL() format string.');
         }
       }
       $fmt = substr($fmt, $p+2);
     }
     if ($i != $n) {
-      Fatal::internalError('Too many arguments to mkSQL().');
+      (new Fatal())->internalError('Too many arguments to mkSQL().');
     }
     return $SQL;
   }
@@ -259,7 +257,7 @@ class Query {
     if (is_bool($r)) {
       return $r;
     } else {
-      $rows = array();
+      $rows = [];
       while($row = $this->_link->fetch_assoc($r)) {
         $rows[] = $row;
       }

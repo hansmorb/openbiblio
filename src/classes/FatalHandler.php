@@ -51,7 +51,7 @@ class FatalHandler {
         if (isset($frame['function'])) {
           echo H($frame['function'].'(');
           if (isset($frame['args'])) {
-            $args = array();
+            $args = [];
             foreach ($frame['args'] as $a) {
               array_push($args, var_export($a, true));
             }

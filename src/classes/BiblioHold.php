@@ -14,20 +14,20 @@
  ******************************************************************************
  */
 class BiblioHold {
-  var $_bibid = "";
-  var $_copyid = "";
-  var $_holdid = "";
-  var $_holdBeginDt = "";
-  var $_mbrid = "";
-  var $_barcodeNmbr = "";
-  var $_statusCd = "";
-  var $_dueBackDt = "";
-  var $_title = "";
-  var $_author = "";
-  var $_materialCd = "";
-  var $_lastName = "";
-  var $_firstName = "";
-  var $_loc;
+  public $_bibid = "";
+  public $_copyid = "";
+  public $_holdid = "";
+  public $_holdBeginDt = "";
+  public $_mbrid = "";
+  public $_barcodeNmbr = "";
+  public $_statusCd = "";
+  public $_dueBackDt = "";
+  public $_title = "";
+  public $_author = "";
+  public $_materialCd = "";
+  public $_lastName = "";
+  public $_firstName = "";
+  public $_loc;
 
   function BiblioCopy () {
     $this->_loc = new Localize(OBIB_LOCALE,"classes");

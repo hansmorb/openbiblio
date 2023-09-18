@@ -4,15 +4,15 @@
  */
  
 class DbIter extends Iter {
-  function DbIter($results) {
+  function __construct($results) {
     $this->results = $results;
   }
   function count() {
-    $link = QueryAny::db();
+    $link = (new QueryAny())->db();
     return $link->num_rows($this->results);
   }
   function next() {
-    $link = QueryAny::db();
+    $link = (new QueryAny())->db();
     $r = $link->fetch_assoc($this->results);
     if ($r === false) {
       return NULL;

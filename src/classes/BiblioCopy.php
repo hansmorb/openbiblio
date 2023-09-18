@@ -16,22 +16,22 @@
  ******************************************************************************
  */
 class BiblioCopy {
-  var $_bibid = "";
-  var $_copyid = "";
-  var $_createDt = "";
-  var $_copyDesc = "";
-  var $_barcodeNmbr = "";
-  var $_barcodeNmbrError = "";
-  var $_statusCd = OBIB_DEFAULT_STATUS;
-  var $_statusBeginDt = "";
-  var $_dueBackDt = "";
-  var $_daysLate = "";
-  var $_mbrid = "";
-  var $_loc;
-  var $_renewalCount = "";
-  var $_custom = array();
+  public $_bibid = "";
+  public $_copyid = "";
+  public $_createDt = "";
+  public $_copyDesc = "";
+  public $_barcodeNmbr = "";
+  public $_barcodeNmbrError = "";
+  public $_statusCd = OBIB_DEFAULT_STATUS;
+  public $_statusBeginDt = "";
+  public $_dueBackDt = "";
+  public $_daysLate = "";
+  public $_mbrid = "";
+  public $_loc;
+  public $_renewalCount = "";
+  public $_custom = [];
 
-  function BiblioCopy () {
+  function __construct () {
     $this->_loc = new Localize(OBIB_LOCALE,"classes");
   }
 
@@ -53,10 +53,7 @@ class BiblioCopy {
   }
 
   function getCustom($field) {
-    if (isset($this->_custom[$field])) {
-      return $this->_custom[$field];
-    }
-    return "";
+    return $this->_custom[$field] ?? "";
   }
   function setCustom($field, $value) {
     $this->_custom[$field] = $value;

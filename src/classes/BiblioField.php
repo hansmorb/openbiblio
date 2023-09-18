@@ -15,18 +15,18 @@
  ******************************************************************************
  */
 class BiblioField {
-  var $_bibid = "";
-  var $_fieldid = "";
-  var $_tag = "";
-  var $_tagError = "";
-  var $_ind1Cd = "";
-  var $_ind2Cd = "";
-  var $_subfieldCd = "";
-  var $_subfieldCdError = "";
-  var $_fieldData = "";
-  var $_fieldDataError = "";
-  var $_isRequired = false;
-  var $_isRepeatable = false;
+  public $_bibid = "";
+  public $_fieldid = "";
+  public $_tag = "";
+  public $_tagError = "";
+  public $_ind1Cd = "";
+  public $_ind2Cd = "";
+  public $_subfieldCd = "";
+  public $_subfieldCdError = "";
+  public $_fieldData = "";
+  public $_fieldDataError = "";
+  public $_isRequired = false;
+  public $_isRepeatable = false;
 
   /****************************************************************************
    * @return boolean true if data is valid, otherwise false.

@@ -18,7 +18,7 @@
   
   if (isset($_POST['locale'])) {
     if (!preg_match('/^[-_a-zA-Z0-9]+$/', $_POST['locale'])) {
-      Fatal::internalError("Bad locale name.");
+      (new Fatal())->internalError("Bad locale name.");
     }
     $locale = $_POST['locale'];
   }
@@ -37,7 +37,7 @@
   $installQ = new InstallQuery();
   $err = $installQ->connect_e();
   if ($err) {
-    Fatal::dbError($e->sql, $e->msg, $e->dberror);
+    (new Fatal())->dbError($e->sql, $e->msg, $e->dberror);
   }
   $version = $installQ->getCurrentDatabaseVersion();
   echo "Database connection is good.<br>\n";

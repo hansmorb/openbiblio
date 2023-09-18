@@ -42,11 +42,7 @@
   }
 
   # Transitions to and from these status codes aren't allowed on this form.
-  $disallowed = array(
-    OBIB_STATUS_SHELVING_CART,
-    OBIB_STATUS_OUT,
-    OBIB_STATUS_ON_HOLD,
-  );
+  $disallowed = [OBIB_STATUS_SHELVING_CART, OBIB_STATUS_OUT, OBIB_STATUS_ON_HOLD];
   #****************************************************************************
   #*  Autobarco
   #****************************************************************************

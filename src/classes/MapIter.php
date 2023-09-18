@@ -1,6 +1,6 @@
 <?php
 class MapIter extends Iter {
-  function MapIter($callback, $iter) {
+  function __construct($callback, $iter) {
     $this->callback = $callback;
     $this->iter = $iter;
   }

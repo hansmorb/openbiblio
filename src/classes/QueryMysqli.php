@@ -20,7 +20,7 @@ class QueryMysqli extends QueryBase
           {
           $this->error = new DbError("Selecting database...",
             "Cannot select database.",
-            $this->my_error($this->connection));
+            $this->my_error());
           }
         }
       else

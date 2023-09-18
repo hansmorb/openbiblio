@@ -6,7 +6,7 @@
 require_once("../functions/inputFuncs.php");
 
 class CsvTable {
-  var $_cols = array();
+  public $_cols = [];
   function escape($str) {
     if (strcspn($str, ";\"\r\n") != strlen($str)) {
       $str = '"'.str_replace('"', '""', $str).'"';
@@ -19,7 +19,7 @@ class CsvTable {
     $this->_cols = array_merge($this->_cols, $cols);
   }
   function start() {
-    $arr = array();
+    $arr = [];
     foreach ($this->_cols as $col) {
       if (!isset($col['title']) or !$col['title']) {
         $col['title'] = $col['name'];
@@ -29,7 +29,7 @@ class CsvTable {
     echo implode(';', $arr)."\r\n";
   }
   function row($row) {
-    $arr = array();
+    $arr = [];
     foreach ($this->_cols as $col) {
       $arr[] = $this->escape($row[$col['name']]);
     }

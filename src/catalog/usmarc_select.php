@@ -37,7 +37,7 @@
     $retPage = $_GET["retpage"];
     # Sanity check
     if (substr($retPage, 0, 3) != '../') {
-      Fatal::internalError('unexpected retPage value');
+      (new Fatal())->internalError('unexpected retPage value');
     }
   } else {
     $retPage = "";
@@ -216,7 +216,7 @@ function backToMain(URL) {
               </td><td class="noborder" colspan="2" width="100%">
                 <?php echo H($tagKey." - ".$tag->getDescription()); ?></a>
               </td></tr>
-              <?php
+<?php
             }
           }
         } else {
@@ -240,7 +240,7 @@ function backToMain(URL) {
           <?php echo H($blockKey." - ".$block->getDescription()); ?>
         </td></tr>
 
-        <?php
+<?php
       }
     }
   ?>

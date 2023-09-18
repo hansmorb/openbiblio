@@ -62,7 +62,7 @@
   #*  Show success page
   #**************************************************************************
   require_once("../shared/header.php");
-  echo $loc->getText("mbrDelSuccess",array("name"=>$mbrName));
+  echo $loc->getText("mbrDelSuccess",["name"=>$mbrName]);
   
 ?>
 <br><br>

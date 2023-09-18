@@ -6,7 +6,7 @@
 class QueryError extends QueryBase
   {
   protected $type = 'error';
-  function QueryError()
+  function __construct()
     {
     $this->error = new DbError("Checking for MySQL Extension...",
       "Unable to connect to database.",

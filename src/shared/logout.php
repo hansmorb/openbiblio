@@ -5,7 +5,7 @@
  
   require_once("../shared/common.php");
 
-  $_SESSION = array();
+  $_SESSION = [];
   session_destroy();
 
   header("Location: ../home/index.php");

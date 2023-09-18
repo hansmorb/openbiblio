@@ -12,8 +12,8 @@
  ******************************************************************************
  */
 class UsmarcBlockDm {
-  var $_blockNmbr = "";
-  var $_description = "";
+  public $_blockNmbr = "";
+  public $_description = "";
 
   /****************************************************************************
    * Getter methods for all fields

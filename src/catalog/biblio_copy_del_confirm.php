@@ -53,7 +53,7 @@
 ?>
 <center>
 <form name="delcopyform" method="POST" action="../catalog/biblio_copy_del.php?bibid=<?php echo HURL($bibid);?>&amp;copyid=<?php echo HURL($copyid);?>&amp;barcode=<?php echo HURL($copy->getBarcodeNmbr());?>">
-  <?php echo $loc->getText("biblioCopyDelConfirmMsg",array("barcodeNmbr"=>$copy->getBarcodeNmbr())); ?>
+  <?php echo $loc->getText("biblioCopyDelConfirmMsg",["barcodeNmbr"=>$copy->getBarcodeNmbr()]); ?>
   <br><br>
   <input type="submit" value="Delete" class="button">
   <input type="button" onClick="self.location='../shared/biblio_view.php?bibid=<?php echo HURL($bibid);?>'" value="Cancel" class="button">

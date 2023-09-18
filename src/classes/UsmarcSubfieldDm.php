@@ -12,10 +12,10 @@
  ******************************************************************************
  */
 class UsmarcSubfieldDm {
-  var $_tag = "";
-  var $_subfieldCd = "";
-  var $_description = "";
-  var $_repeatableFlg = "";
+  public $_tag = "";
+  public $_subfieldCd = "";
+  public $_description = "";
+  public $_repeatableFlg = "";
 
   /****************************************************************************
    * Getter methods for all fields

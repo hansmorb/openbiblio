@@ -16,10 +16,10 @@ require_once("../classes/BiblioHold.php");
  ******************************************************************************
  */
 class BiblioHoldQuery extends Query {
-  var $_rowCount = 0;
-  var $_loc;
+  public $_rowCount = 0;
+  public $_loc;
 
-  function BiblioHoldQuery() {
+  function __construct() {
     $this->Query();
     $this->_loc = new Localize(OBIB_LOCALE,"classes");
   }

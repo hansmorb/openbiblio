@@ -70,7 +70,7 @@
     return urlencode($s);
   }
   function _mkPostVars($arr, $prefix) {
-    $pv = array();
+    $pv = [];
     foreach ($arr as $k => $v) {
       if ($prefix !== NULL) {
         $k = $prefix."[$k]";
@@ -113,14 +113,7 @@
 
   # login allows redirects for:
 
-    $pages = array(
-      'opac'=>'../opac/index.php',
-      'home'=>'../home/index.php',
-      'circulation'=>'../circ/index.php',
-      'cataloging'=>'../catalog/index.php',
-      'admin'=>'../admin/index.php',
-      'reports'=>'../reports/index.php',
-    );
+    $pages = ['opac'=>'../opac/index.php', 'home'=>'../home/index.php', 'circulation'=>'../circ/index.php', 'cataloging'=>'../catalog/index.php', 'admin'=>'../admin/index.php', 'reports'=>'../reports/index.php'];
 
   require_once('../database_constants.php');
   require_once('../shared/global_constants.php');

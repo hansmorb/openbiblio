@@ -15,27 +15,27 @@
  ******************************************************************************
  */
 class Staff {
-  var $_userid = "";
-  var $_lastChangeDt = "";
-  var $_lastChangeUserid = "";
-  var $_lastChangeUsername = "";
-  var $_pwd = "";
-  var $_pwdError = "";
-  var $_pwd2 = "";
-  var $_lastName = "";
-  var $_lastNameError = "";
-  var $_firstName = "";
-  var $_username = "";
-  var $_usernameError = "";
-  var $_circAuth = false;
-  var $_circMbrAuth = FALSE;
-  var $_catalogAuth = false;
-  var $_adminAuth = false;
-  var $_reportsAuth = FALSE;
-  var $_suspended = false;
-  var $_loc;
+  public $_userid = "";
+  public $_lastChangeDt = "";
+  public $_lastChangeUserid = "";
+  public $_lastChangeUsername = "";
+  public $_pwd = "";
+  public $_pwdError = "";
+  public $_pwd2 = "";
+  public $_lastName = "";
+  public $_lastNameError = "";
+  public $_firstName = "";
+  public $_username = "";
+  public $_usernameError = "";
+  public $_circAuth = false;
+  public $_circMbrAuth = FALSE;
+  public $_catalogAuth = false;
+  public $_adminAuth = false;
+  public $_reportsAuth = FALSE;
+  public $_suspended = false;
+  public $_loc;
 
-  function Staff () {
+  function __construct () {
     $this->_loc = new Localize(OBIB_LOCALE,"classes");
   }
 

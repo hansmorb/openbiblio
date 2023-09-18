@@ -15,22 +15,22 @@
  ******************************************************************************
  */
 class Biblio {
-  var $_bibid = "";
-  var $_createDt = "";
-  var $_lastChangeDt = "";
-  var $_lastChangeUserid = "";
-  var $_lastChangeUsername = "";
-  var $_materialCd = "";
-  var $_collectionCd = "";
-  var $_callNmbr1 = "";
-  var $_callNmbr2 = "";
-  var $_callNmbr3 = "";
-  var $_callNmbrError = "";
-  var $_biblioFields = array();
-  var $_opacFlg = true;
-  var $_loc;
+  public $_bibid = "";
+  public $_createDt = "";
+  public $_lastChangeDt = "";
+  public $_lastChangeUserid = "";
+  public $_lastChangeUsername = "";
+  public $_materialCd = "";
+  public $_collectionCd = "";
+  public $_callNmbr1 = "";
+  public $_callNmbr2 = "";
+  public $_callNmbr3 = "";
+  public $_callNmbrError = "";
+  public $_biblioFields = [];
+  public $_opacFlg = true;
+  public $_loc;
 
-  function Biblio () {
+  function __construct () {
     $this->_loc = new Localize(OBIB_LOCALE,"classes");
   }
 

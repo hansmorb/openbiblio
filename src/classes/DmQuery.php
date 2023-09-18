@@ -8,7 +8,7 @@ require_once("../classes/Dm.php");
 require_once("../classes/Query.php");
 
 class DmQuery extends Query {
-  var $_tableNm = "";
+  public $_tableNm = "";
 
   function _get($table, $code = "") {
     $this->_tableNm = $table;
@@ -20,10 +20,10 @@ class DmQuery extends Query {
     return $this->exec($sql);
   }
   function get($table) {
-    return array_map(array($this, '_mkObj'), $this->_get($table));
+    return array_map([$this, '_mkObj'], $this->_get($table));
   }
   function getAssoc($table, $column="description") {
-    $assoc = array();
+    $assoc = [];
     foreach ($this->_get($table) as $row) {
       $assoc[$row['code']] = $row[$column];
     }
@@ -31,8 +31,8 @@ class DmQuery extends Query {
   }
   function get1($table, $code) {
     $rows = $this->_get($table, $code);
-    if (count($rows) != 1) {
-     Fatal::internalError("Invalid domain table code");
+    if ((is_countable($rows) ? count($rows) : 0) != 1) {
+     (new Fatal())->internalError("Invalid domain table code");
     }
     return $this->_mkObj($rows[0]);
   }
@@ -52,14 +52,14 @@ class DmQuery extends Query {
       $sql .= "from mbr_classify_dm left join member on mbr_classify_dm.code = member.classification ";
       $sql .= "group by 1, 2, 3, 4 ";
     } else {
-      Fatal::internalError("Cannot retrieve stats for that dm table");
+      (new Fatal())->internalError("Cannot retrieve stats for that dm table");
     }
     $sql .= "order by description ";
-    return array_map(array($this, '_mkObj'), $this->exec($sql));
+    return array_map([$this, '_mkObj'], $this->exec($sql));
   }
 
   function getCheckoutStats($mbrid) {
-    $link = QueryAny::db();
+    $link = (new QueryAny())->db();
     $MySQLn = explode('.', implode('', explode('-', $link->get_server_info())));
     if ($MySQLn[0] < '5') {
         $cmd = 'type=heap';
@@ -83,7 +83,7 @@ class DmQuery extends Query {
                         . "where member.mbrid=%N "
                         . "group by mat.code, mat.description, mat.default_flg, "
                         . "privs.checkout_limit, privs.renewal_limit ", $mbrid);
-    return array_map(array($this, '_mkObj'), $this->exec($sql));
+    return array_map([$this, '_mkObj'], $this->exec($sql));
   }
 
   function _mkObj($array) {

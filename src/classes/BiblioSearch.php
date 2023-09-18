@@ -12,33 +12,33 @@
  ******************************************************************************
  */
 class BiblioSearch {
-  var $_bibid = "";
-  var $_copyid = "";
-  var $_createDt = "";
-  var $_lastChangeDt = "";
-  var $_lastChangeUserid = "";
-  var $_lastChangeUsername = "";
-  var $_materialCd = "";
-  var $_collectionCd = "";
-  var $_callNmbr1 = "";
-  var $_callNmbr2 = "";
-  var $_callNmbr3 = "";
-  var $_callNmbrError = "";
-  var $_title = "";
-  var $_titleRemainder = "";
-  var $_responsibilityStmt = "";
-  var $_author = "";
-  var $_topic1 = "";
-  var $_topic2 = "";
-  var $_topic3 = "";
-  var $_topic4 = "";
-  var $_topic5 = "";
-  var $_barcodeNmbr = "";
-  var $_statusCd = "";
-  var $_statusBeginDt = "";
-  var $_dueBackDt = "";
-  var $_daysLate = "";
-  var $_renewalCount = "";
+  public $_bibid = "";
+  public $_copyid = "";
+  public $_createDt = "";
+  public $_lastChangeDt = "";
+  public $_lastChangeUserid = "";
+  public $_lastChangeUsername = "";
+  public $_materialCd = "";
+  public $_collectionCd = "";
+  public $_callNmbr1 = "";
+  public $_callNmbr2 = "";
+  public $_callNmbr3 = "";
+  public $_callNmbrError = "";
+  public $_title = "";
+  public $_titleRemainder = "";
+  public $_responsibilityStmt = "";
+  public $_author = "";
+  public $_topic1 = "";
+  public $_topic2 = "";
+  public $_topic3 = "";
+  public $_topic4 = "";
+  public $_topic5 = "";
+  public $_barcodeNmbr = "";
+  public $_statusCd = "";
+  public $_statusBeginDt = "";
+  public $_dueBackDt = "";
+  public $_daysLate = "";
+  public $_renewalCount = "";
 
   /****************************************************************************
    * Getter methods for all fields

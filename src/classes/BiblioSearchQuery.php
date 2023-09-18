@@ -18,15 +18,15 @@ require_once("../classes/Localize.php");
  ******************************************************************************
  */
 class BiblioSearchQuery extends Query {
-  var $_itemsPerPage = 1;
-  var $_rowNmbr = 0;
-  var $_currentRowNmbr = 0;
-  var $_currentPageNmbr = 0;
-  var $_rowCount = 0;
-  var $_pageCount = 0;
-  var $_loc;
+  public $_itemsPerPage = 1;
+  public $_rowNmbr = 0;
+  public $_currentRowNmbr = 0;
+  public $_currentPageNmbr = 0;
+  public $_rowCount = 0;
+  public $_pageCount = 0;
+  public $_loc;
 
-  function BiblioSearchQuery() {
+  function __construct() {
     $this->Query();
     $this->_loc = new Localize(OBIB_LOCALE,"classes");
   }
@@ -81,7 +81,7 @@ class BiblioSearchQuery extends Query {
       if ($opacFlg) $criteria = "where opac_flg = 'Y' ";
     } else {
       if ($type == OBIB_SEARCH_BARCODE) {
-	$criteria = $this->_getCriteria($type,array("biblio_copy.barcode_nmbr"),$words);
+	$criteria = $this->_getCriteria($type,["biblio_copy.barcode_nmbr"],$words);
       } elseif ($type == OBIB_SEARCH_AUTHOR) {
         $drop=1;
         for ($i = 0; $i < count($words); $i++) {
@@ -99,7 +99,7 @@ class BiblioSearchQuery extends Query {
           }
           $join .= "and not bf".$i.".subfield_cd regexp('[0-9]') ";
         }
-	$criteria = $this->_getCriteria($type,array("biblio.author","biblio.responsibility_stmt"),$words,$bField=true,$drop);
+	$criteria = $this->_getCriteria($type,["biblio.author", "biblio.responsibility_stmt"],$words,$bField=true,$drop);
       } elseif ($type == OBIB_SEARCH_SUBJECT) {
         $drop=1;
         for ($i = 0; $i < count($words); $i++) {
@@ -123,9 +123,9 @@ class BiblioSearchQuery extends Query {
           }
           $join .= "and not bf".$i.".subfield_cd regexp('[0-9]') ";
         }
-	$criteria = $this->_getCriteria($type,array("biblio.topic1","biblio.topic2","biblio.topic3","biblio.topic4","biblio.topic5"),$words,$bField=true,$drop);
+	$criteria = $this->_getCriteria($type,["biblio.topic1", "biblio.topic2", "biblio.topic3", "biblio.topic4", "biblio.topic5"],$words,$bField=true,$drop);
       } elseif ($type == OBIB_SEARCH_CALLNO) {
-	$criteria = $this->_getCriteria($type,array("biblio.call_nmbr1","biblio.call_nmbr2","biblio.call_nmbr3"),$words);
+	$criteria = $this->_getCriteria($type,["biblio.call_nmbr1", "biblio.call_nmbr2", "biblio.call_nmbr3"],$words);
       } elseif ($type == OBIB_SEARCH_KEYWORD) {
         $drop=1;
         for ($i = 0; $i < count($words); $i++) {
@@ -160,9 +160,9 @@ class BiblioSearchQuery extends Query {
           if ($opacFlg) $join .= "and not (bf".$i.".tag in ('526', '856') and bf".$i.".subfield_cd = 'x') ";
           $join .= "and not bf".$i.".subfield_cd regexp('[0-9]') ";
         }
-	$criteria = $this->_getCriteria($type,array("biblio.author","biblio.responsibility_stmt","biblio.title","biblio.title_remainder","biblio.topic1","biblio.topic2","biblio.topic3","biblio.topic4","biblio.topic5"),$words,$bField=true,$drop);
+	$criteria = $this->_getCriteria($type,["biblio.author", "biblio.responsibility_stmt", "biblio.title", "biblio.title_remainder", "biblio.topic1", "biblio.topic2", "biblio.topic3", "biblio.topic4", "biblio.topic5"],$words,$bField=true,$drop);
       } else {
-	$criteria = $this->_getCriteria($type,array("biblio.title","biblio.title_remainder"),$words);
+	$criteria = $this->_getCriteria($type,["biblio.title", "biblio.title_remainder"],$words);
       }
       if ($opacFlg) $criteria = $criteria."and opac_flg = 'Y' ";
     }
@@ -202,7 +202,7 @@ class BiblioSearchQuery extends Query {
     }
 
     # Calculate stats based on row count
-    $link = QueryAny::db();
+    $link = (new QueryAny())->db();
     $this->_rowCount = implode($link->fetch_row($link->query('select found_rows();')));
     $this->_pageCount = ceil($this->_rowCount / $this->_itemsPerPage);
     return true;
@@ -222,7 +222,7 @@ class BiblioSearchQuery extends Query {
     # setting selection criteria sql
     $prefix = "where ";
     $criteria = "";
-    for ($i = 0; $i < count($words); $i++) {
+    for ($i = 0; $i < (is_countable($words) ? count($words) : 0); $i++) {
       # Drop very short words when querying biblio_field
       if ($bField and strlen($words[$i]) > $drop) array_push($cols, "bf".$i.".field_data");
       $criteria .= $prefix.$this->_getLike($type,$cols,$words[$i]);
@@ -235,12 +235,12 @@ class BiblioSearchQuery extends Query {
   function _getLike($type,&$cols,$word) {
     $prefix = "";
     $suffix = "";
-    if (count($cols) > 1) {
+    if ((is_countable($cols) ? count($cols) : 0) > 1) {
       $prefix = "(";
       $suffix = ")";
     }
     $like = "";
-    for ($i = 0; $i < count($cols); $i++) {
+    for ($i = 0; $i < (is_countable($cols) ? count($cols) : 0); $i++) {
       $like .= $prefix;
       if ($type == OBIB_SEARCH_CALLNO) $like .= $this->mkSQL("%C like %Q ", $cols[$i], $word."%");
       else $like .= $this->mkSQL("%C like %Q ", $cols[$i], "%".$word."%");

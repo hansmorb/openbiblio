@@ -12,12 +12,12 @@
  ******************************************************************************
  */
 class UsmarcTagDm {
-  var $_blockNmbr = "";
-  var $_tag = "";
-  var $_description = "";
-  var $_ind1Description = "";
-  var $_ind2Description = "";
-  var $_repeatableFlg = "";
+  public $_blockNmbr = "";
+  public $_tag = "";
+  public $_description = "";
+  public $_ind1Description = "";
+  public $_ind2Description = "";
+  public $_repeatableFlg = "";
 
   /****************************************************************************
    * Getter methods for all fields

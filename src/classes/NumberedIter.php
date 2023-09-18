@@ -1,6 +1,6 @@
 <?php
 class NumberedIter extends Iter {
-  function NumberedIter($iter) {
+  function __construct($iter) {
     $this->iter = $iter;
     $this->n = 0;
   }

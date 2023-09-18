@@ -37,7 +37,7 @@
   
   # Hack to get around the way printUsmarcInputText works
   class CustomDescr {
-    function CustomDescr($descr) {
+    function __construct($descr) {
       $this->descr = $descr;
     }
     function getDescription() {
@@ -49,7 +49,7 @@
   $matQ->connect();
   $rows = $matQ->get($materialCd);
   $matQ->close();
-  $descrs = array();
+  $descrs = [];
   foreach ($rows as $row) {
     $mytag = $row["tag"];
     $mysubfieldcd = $row["subfieldCd"];
