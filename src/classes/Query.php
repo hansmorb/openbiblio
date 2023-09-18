@@ -22,13 +22,13 @@ class Query {
     }
   }
   function connect_e() {
-    [$this->_link, $e] = (new Query())->_connect_e();
+    [$this->_link, $e] = (self::_connect_e());
     return $e;
   }
   /* This static method shares the actual DBMS connection
    * with all Query instances.
    */
-  function _connect_e() {
+  static function _connect_e() {
     $link = (new QueryAny())->db();
     if ($link->error_is()) {
       return [NULL, $link->error_get()];
