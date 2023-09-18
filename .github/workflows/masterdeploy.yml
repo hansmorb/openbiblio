@@ -1,0 +1,14 @@
+name: MasterDeployCI
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Zip Folder
+        run: zip -r release.zip src
+      - name: Release to Github
+        run: echo "Release"
