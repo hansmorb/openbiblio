@@ -8,7 +8,7 @@ class FieldError extends ObibError {
   function __construct(public $field, $msg) {
     parent::__construct($msg);
   }
-  function listExtract($errors) {
+  static function listExtract($errors) {
     $msgs = [];
     $l = [];
     foreach ($errors as $e) {
@@ -24,7 +24,7 @@ class FieldError extends ObibError {
     }
     return [$msg, $l];
   }
-  function backToForm($url, $errors) {
+  static function backToForm($url, $errors) {
     [$msg, $fielderrs] = FieldError::listExtract($errors);
     $_SESSION["postVars"] = mkPostVars();
     $_SESSION["pageErrors"] = $fielderrs;
