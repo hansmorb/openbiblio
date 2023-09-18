@@ -7,8 +7,8 @@
  *  \/  MySQL Datenbank und dem MySQL-Benutzer, den Sie erstellt haben.     \/
  *********************************************************************************
  */
-define("OBIB_HOST",     "127.0.0.1");
-define("OBIB_PORT",     "3307");
+define("OBIB_HOST",     "openbiblio-db");
+define("OBIB_PORT",     "3306");
 define("OBIB_DATABASE", "openbiblio");
 define("OBIB_USERNAME", "db_user");
 define("OBIB_PWD",      "db_passw");

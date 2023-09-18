@@ -16,9 +16,11 @@ services:
       - mysql
     environment:
       MYSQL_HOST: mysql
-      MYSQL_PORT: 3307
+      MYSQL_PORT: 3306
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    links:
+        - mysql
     networks:
       - openBiblio
 
