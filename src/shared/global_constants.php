@@ -56,6 +56,10 @@ const OBIB_BARCODE_RE = '/^[A-Za-z0-9._\/\-]+$/';
 
 const OBIB_LOCALE_ROOT = "../locale";
 
+# lock name (was not defined for some reason)
+define("OBIB_LOCK_NAME", OBIB_DATABASE.'.OpenBiblio.BigLock');
+define("OBIB_LOCK_TIMEOUT", 5);
+
 # Not fully implemented yet.
 const DB_TABLENAME_PREFIX = "";
 const BARCODENMBR = "barcodeNmbr";
