@@ -19,7 +19,7 @@
     exit();
   }
 
-  if ( $_GET[\BARCODENMBR] ) {
+  if ( isset( $_GET[\BARCODENMBR] ) ) {
          $barcode = trim($_GET[\BARCODENMBR]);
   }
     else {
@@ -46,10 +46,10 @@
   if ($info['mbrid']) {
     $params .= "&mbrid=".U($info['mbrid']);
   }
-  if ($info['late']) {
+  if (isset ($info['late'] )) {
     $params .= "&late=".U($info['late']);
   }
-  if ($info['hold']) {
+  if (isset ($info['hold']) ) {
     header("Location: ../circ/hold_message.php".$params);
   } else {
     header("Location: ../circ/checkin_form.php".$params);
