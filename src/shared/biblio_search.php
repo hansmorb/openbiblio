@@ -211,7 +211,7 @@ function changePage(page,sort)
   }
 ?>
 <br />
-<?php printResultPages($loc, $currentPageNmbr); ?><br>
+<?php printResultPages($loc, $currentPageNmbr,$biblioQ->getPageCount(),$sortBy); ?><br>
 <br>
 
 <!--**************************************************************************
@@ -307,5 +307,5 @@ function changePage(page,sort)
     $biblioQ->close();
   ?>
   </table><br>
-<?php printResultPages($loc, $currentPageNmbr); ?><br>
+<?php printResultPages($loc, $currentPageNmbr, $biblioQ->getPageCount(), $sortBy); ?><br>
 <?php require_once("../shared/footer.php"); ?>

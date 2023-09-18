@@ -148,7 +148,7 @@
 
   echo '<p>'.$rpt->count().' '.$loc->getText("results found.").'</p>';
   if ($format == 'paged') {
-    printResultPages($loc, $page);
+    printResultPages($loc, $page, ceil($rpt->count() / OBIB_ITEMS_PER_PAGE));
   }
 ?>
 
@@ -169,7 +169,7 @@
 <?php
   if ($format == 'paged') {
     $rpt->pageTable($page, new Table('echolink'));
-    printResultPages($loc, $page);
+    printResultPages($loc, $page, ceil($rpt->count()/OBIB_ITEMS_PER_PAGE));
   } else {
     $rpt->table(new Table('echolink'));
   }
