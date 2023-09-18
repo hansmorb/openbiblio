@@ -65,7 +65,7 @@ class QueryMysqli extends QueryBase
   /* Get the MySQL error. */
   function my_error()
     {
-    return mysqli_error($this->connection);
+    return mysqli_connect_error();
     }
   /* . */
   function num_rows($result) {
@@ -74,7 +74,12 @@ class QueryMysqli extends QueryBase
   /* Perform a query. Use connection() to ensure the database is connected. */
   function query($sql)
     {
-    return mysqli_query($this->connection(), $sql);
+		if ($this->connection_is()) {
+			return mysqli_query($this->connection(), $sql);
+		}
+		else {
+			return false;
+		}
     }
   /* Make strings safe for MySQL. */
   function real_escape_string($string)
