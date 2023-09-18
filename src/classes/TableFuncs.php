@@ -4,10 +4,10 @@
  */
  
 class TableFuncs {
-  function raw($col, $row, $params) {
+  static function raw($col, $row, $params) {
     return $row[$col['name']];
   }
-  function _link_common($col, $row, $params, $url, $rpt_colname=NULL) {
+  static function _link_common($col, $row, $params, $url, $rpt_colname=NULL) {
     if ($rpt_colname and isset($params['rpt']) and isset($params['rpt_colnames'])
         and in_array($rpt_colname, $params['rpt_colnames'])) {
       assert($row[".seqno"] !== NULL);
@@ -21,17 +21,17 @@ class TableFuncs {
     $s .= 'href="'.$url.'">'.H($row[$col['name']]).'</a>';
     return $s;
   }
-  function item_cart_add($col, $row, $params) {
+  static function item_cart_add($col, $row, $params) {
     global $tab;	# FIXME - get rid of $tab
     $url = '../shared/cart_add.php?name=bibid&amp;id[]='.HURL($row['bibid']).'&amp;tab='.HURL($tab);
     return (new TableFuncs())->_link_common($col, $row, $params, $url);
   }
-  function item_cart_del($col, $row, $params) {
+  static function item_cart_del($col, $row, $params) {
     global $tab;	# FIXME - get rid of $tab
     $url = '../shared/cart_del.php?name=bibid&amp;id[]='.HURL($row['bibid']).'&amp;tab='.HURL($tab);
     return (new TableFuncs())->_link_common($col, $row, $params, $url);
   }
-  function biblio_link($col, $row, $params) {
+  static function biblio_link($col, $row, $params) {
     global $tab;	# FIXME - get rid of $tab
     $url = '../shared/biblio_view.php?bibid='.HURL($row['bibid']);
     if ($tab != 'opac') {
@@ -41,7 +41,7 @@ class TableFuncs {
     }
     return (new TableFuncs())->_link_common($col, $row, $params, $url, 'bibid');
   }
-  function subject_link($col, $row, $params) {
+  static function subject_link($col, $row, $params) {
     global $tab;	# FIXME - get rid of $tab
     $url = '../shared/biblio_search.php?searchType=subject&amp;exact=1&amp;searchText='.HURL($row['subject']);
     if ($tab != 'opac') {
@@ -51,7 +51,7 @@ class TableFuncs {
     }
     return (new TableFuncs())->_link_common($col, $row, $params, $url);
   }
-  function series_link($col, $row, $params) {
+  static function series_link($col, $row, $params) {
     global $tab;	# FIXME - get rid of $tab
     $url = '../shared/biblio_search.php?searchType=series&amp;exact=1&amp;searchText='.HURL($row['series']);
     if ($tab != 'opac') {
@@ -61,23 +61,23 @@ class TableFuncs {
     }
     return (new TableFuncs())->_link_common($col, $row, $params, $url);
   }
-  function booking_link($col, $row, $params) {
+  static function booking_link($col, $row, $params) {
     $url = '../circ/booking_view.php?bookingid='.HURL($row['bookingid']);
     return (new TableFuncs())->_link_common($col, $row, $params, $url, 'bookingid');
   }
-  function member_link($col, $row, $params) {
+  static function member_link($col, $row, $params) {
     $url = '../circ/mbr_view.php?mbrid='.HURL($row['mbrid']);
     return (new TableFuncs())->_link_common($col, $row, $params, $url, 'mbrid');
   }
-  function site_link($col, $row, $params) {
+  static function site_link($col, $row, $params) {
     $url = '../admin/sites_edit_form.php?siteid='.HURL($row['siteid']);
     return (new TableFuncs())->_link_common($col, $row, $params, $url, 'siteid');
   }
-  function calendar_link($col, $row, $params) {
+  static function calendar_link($col, $row, $params) {
     $url = '../admin/calendar_edit_form.php?calendar='.HURL($row['calendar']);
     return (new TableFuncs())->_link_common($col, $row, $params, $url, 'calendar');
   }
-  function checkbox($col, $row, $params) {
+  static function checkbox($col, $row, $params) {
     assert($col["checkbox_name"] != NULL);
     assert($col["checkbox_value"] != NULL);
     $s = '<input type="checkbox" ';
@@ -93,7 +93,7 @@ class TableFuncs {
     $s .= '/>';
     return $s;
   }
-  function select($col, $row, $params) {
+  static function select($col, $row, $params) {
     assert($col["select_name"] != NULL);
     assert($col["select_index"] != NULL);
     assert($col["select_key"] != NULL);
@@ -110,7 +110,7 @@ class TableFuncs {
     }
     return inputfield('select', $name, $selected, NULL, $data);
   }
-  function member_list($col, $row, $params) {
+  static function member_list($col, $row, $params) {
     $s = '';
     foreach ($row[$col['name']] as $m) {
       $s .= '<a href="../circ/mbr_view.php?mbrid='.HURL($m['mbrid']).'">'
