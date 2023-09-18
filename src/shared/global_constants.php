@@ -33,7 +33,7 @@ const OBIB_SEARCH_KEYWORD = "7";
  *  Misc. system constants
  ****************************************************************************
  */
-const OBIB_CODE_VERSION = "0.7.3g";
+const OBIB_CODE_VERSION = "0.7.3h";
 const OBIB_LATEST_DB_VERSION = "0.7.1";
 const OBIB_DEFAULT_STATUS = "in";
 const OBIB_STATUS_IN = "in";
