@@ -17,5 +17,5 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: ${{ github.event.repository.name }}.zip
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
