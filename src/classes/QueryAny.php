@@ -39,6 +39,7 @@ class QueryAny
         }
       $db_code->database_name_set(OBIB_DATABASE);
       $db_code->host_set(OBIB_HOST);
+	  $db_code->port_set(OBIB_PORT);
       $db_code->username_set(OBIB_USERNAME);
       $db_code->password_set(OBIB_PWD);
       }

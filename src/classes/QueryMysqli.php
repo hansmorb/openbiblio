@@ -16,7 +16,7 @@ class QueryMysqli extends QueryBase
     {
     if (!isset($this->connection))
       {
-      $this->connection = mysqli_connect($this->host, $this->username, $this->password);
+      $this->connection = mysqli_connect($this->host, $this->username, $this->password, null, $this->port);
       if ($this->connection_is())
         {
      $rc = mysqli_select_db($this->connection, $this->database_name);

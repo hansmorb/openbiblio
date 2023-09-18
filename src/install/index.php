@@ -19,8 +19,9 @@
   
   include("../install/header.php");
   // 0.7: CircQuery uses PHP to determine current time, other scripts use MySQL
-  $link = (new QueryAny())->db();
-  $my_date = implode($link->fetch_row($link->query('select sysdate();')));
+  $link  = (new QueryAny())->db();
+  $sysDate = $link->fetch_row( $link->query( 'select sysdate();' ) );
+  $my_date = ! $sysDate ? false : implode( $sysDate );
   date_default_timezone_set(MAIN_TIMEZONE);
   $php_date = date('Y-m-d H:i:s');
   if ($php_date != $my_date) {

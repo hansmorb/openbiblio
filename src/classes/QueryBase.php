@@ -10,6 +10,7 @@ class QueryBase
   protected $database_name = '';
   protected $error = null;
   protected $host = '';
+  protected int $port = 3306;
   protected $password = '';
   protected $username = '';
   /* Get the database connection. */
@@ -76,6 +77,11 @@ class QueryBase
     {
     $this->host = $this->string_safe($host);
     }
+
+  function port_set($port)
+	{
+	$this->port = intval($port);
+	}
   /* . */
   function insertID() {
     print '<p>Function insertID() not created for database type ' . $this->type . '</p>';
