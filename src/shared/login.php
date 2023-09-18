@@ -14,7 +14,7 @@
   #****************************************************************************
   #*  Checking for post vars.  Go back to form if none found.
   #****************************************************************************
-  $pageErrors = "";
+  $pageErrors = array();
   if (count($_POST) == 0) {
     header("Location: ../shared/loginform.php");
     exit();
@@ -23,7 +23,7 @@
   #****************************************************************************
   #*  Username edits
   #****************************************************************************
-  $username = $_POST["username"];
+  $username = $_POST["username"] ?? "";
   if ($username == "") {
     $error_found = true;
     $pageErrors["username"] = $loc->getText("loginUserNameReqErr");
@@ -33,7 +33,7 @@
   #*  Password edits
   #****************************************************************************
   $error_found = false;
-  $pwd = $_POST["pwd"];
+  $pwd = $_POST["pwd"] ?? "";
   if ($pwd == "") {
     $error_found = true;
     $pageErrors["pwd"] = $loc->getText("loginPwdReqErr");

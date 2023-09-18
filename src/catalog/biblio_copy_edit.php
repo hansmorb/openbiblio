@@ -78,7 +78,7 @@
     }
   }
   
-  $validBarco = $_POST["validBarco"];
+  $validBarco = $_POST["validBarco"] ?? "";
   $validData = $copy->validateData($validBarco);
   if (!$validData) {
     $copyQ->close();
