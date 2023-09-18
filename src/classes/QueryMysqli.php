@@ -7,9 +7,6 @@
 class QueryMysqli extends QueryBase
   {
   protected $type = 'mysqli';
-  public function __construct() {
-    $this->connection = $this->connection();
-  }
 
   /* Return the database connection type. */
   function connection()

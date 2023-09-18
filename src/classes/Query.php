@@ -29,7 +29,9 @@ class Query {
    * with all Query instances.
    */
   static function _connect_e() {
-    $link = (new QueryAny())->db();
+    $databaseQuery = new QueryAny();
+    $link     = ( $databaseQuery )->db();
+    $link->connection();
     if ($link->error_is()) {
       return [NULL, $link->error_get()];
     }
