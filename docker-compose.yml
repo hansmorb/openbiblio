@@ -34,6 +34,7 @@ services:
       - "3307:3306"  # Map MySQL port if needed
     networks:
       - openBiblio
+    command: --character-set-server=latin1 --collation-server=latin1_german1_ci
 networks:
   openBiblio:
 
