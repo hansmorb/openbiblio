@@ -36,7 +36,25 @@ services:
       - "3307:3306"  # Map MySQL port if needed
     networks:
       - openBiblio
+    volumes:
+      - ./data/db:/var/lib/mysql
     command: --character-set-server=latin1 --collation-server=latin1_german1_ci
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: openbiblio-phpmyadmin
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: openbiblio-db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+    ports:
+        - "8085:80"
+    networks:
+      - openBiblio
+
 networks:
   openBiblio:
 
