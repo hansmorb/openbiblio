@@ -1,6 +1,16 @@
 # openbiblio
 Fork of https://openbiblio.de/
-Slowly trying to make it work for PHP8 to support legacy libraries
+Slowly trying to make it work for PHP8 to support legacy libraries.
+This is the German translation of OpenBiblio.
+
+What works:
+- Base setup (without test-data)
+- Login
+- Most basic screens
+
+What doesn't work:
+- Most querys
+- Pretty much everything
 
 # Spin up development enviroment
 1. Clone the GitHub repository to a local folder
