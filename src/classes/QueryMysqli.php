@@ -7,6 +7,10 @@
 class QueryMysqli extends QueryBase
   {
   protected $type = 'mysqli';
+  public function __construct() {
+    $this->connection = $this->connection();
+  }
+
   /* Return the database connection type. */
   function connection()
     {
@@ -51,6 +55,9 @@ class QueryMysqli extends QueryBase
   }
   /* . */
   function fetch_row($result) {
+    if ($result === false) {
+      return false;
+    }
     return mysqli_fetch_row($result);
   }
   /* . */
