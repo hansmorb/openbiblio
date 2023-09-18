@@ -36,13 +36,13 @@
   if (isset($_GET["retpage"])) {
     $retPage = $_GET["retpage"];
     # Sanity check
-    if (substr($retPage, 0, 3) != '../') {
+    if (!str_starts_with($retPage, '../')) {
       (new Fatal())->internalError('unexpected retPage value');
     }
   } else {
     $retPage = "";
   }
-  if (strpos($retPage, '?') === false) {
+  if (!str_contains($retPage, '?')) {
     $sepchar = '?';
   } else {
     $sepchar = '&';

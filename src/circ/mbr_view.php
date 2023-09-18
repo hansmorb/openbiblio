@@ -81,7 +81,7 @@
   #****************************************************************************
   $dueMsg = "";
   $pgErrors = $_SESSION['pageErrors'];
-  if (substr($pgErrors[\BARCODENMBR], 0, 3) === '!!!') {
+  if (str_starts_with($pgErrors[\BARCODENMBR], '!!!')) {
 	  $dueMsg = "<font class=\"error\">".substr($pgErrors[\BARCODENMBR], 3)."</font><br><br>";
 	  unset($postVars);
   	  unset($pageErrors);

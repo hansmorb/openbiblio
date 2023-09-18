@@ -578,7 +578,7 @@ class PDF {
       while(!feof($f))
         $font.=fread($f,8192);
       fclose($f);
-      $compressed=(substr($file,-2)=='.z');
+      $compressed=(str_ends_with($file, '.z'));
       if(!$compressed && isset($info['length2']))
       {
         $header=(ord($font[0])==128);

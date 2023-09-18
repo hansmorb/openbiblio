@@ -22,17 +22,11 @@ class DbOld {
       return false;
     }
     $link = (new QueryAny())->db();
-    switch ($arrayType) {
-      case OBIB_NUM:
-        return $link->fetch_row($this->results);
-        break;
-      case OBIB_BOTH:
-        return $link->fetch_array_both($this->results);
-        break;
-      case OBIB_ASSOC:
-      default:
-        return $link->fetch_assoc($this->results);
-    }
+    return match ($arrayType) {
+        OBIB_NUM => $link->fetch_row($this->results),
+        OBIB_BOTH => $link->fetch_array_both($this->results),
+        default => $link->fetch_assoc($this->results),
+    };
     return false;
   }
   function resetResult() {

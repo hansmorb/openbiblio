@@ -4,8 +4,6 @@
  */
  
 class RptIter extends Iter {
-  # These are private.
-  public $params;
   public $iter;
   public $subselects;
   # $sqls is a list of tuples of array($code, $subselects).
@@ -45,8 +43,7 @@ class RptIter extends Iter {
   #	array('order_by_expr')
   #		An appropriate SQL ORDER BY clause is appended to
   #		the query at this point.
-  function __construct($sqls, $params) {
-    $this->params = $params;
+  function __construct($sqls, public $params) {
     $this->q = new Query();
     foreach ($sqls as $s) {
       [$code, $subs] = $s;

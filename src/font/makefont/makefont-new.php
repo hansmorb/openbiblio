@@ -126,7 +126,7 @@ function ReadAFM($file,&$map)
 			$cc=(int)$e[1];
 			$w=$e[4];
 			$gn=$e[7];
-			if(substr($gn,-4)=='20AC')
+			if(str_ends_with($gn, '20AC'))
 				$gn='Euro';
 			if(isset($fix[$gn]))
 			{

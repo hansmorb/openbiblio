@@ -5,11 +5,8 @@
 
 /* For when an error applies to a particular form or DB field */
 class FieldError extends ObibError {
-  /* public */
-  public $field;
-  function __construct($field, $msg) {
+  function __construct(public $field, $msg) {
     parent::__construct($msg);
-    $this->field = $field;
   }
   function listExtract($errors) {
     $msgs = [];

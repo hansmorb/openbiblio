@@ -10,14 +10,10 @@ class Table {
   public $_cols;
   public $_params;
   public $_rown;
-  public $_echolink;
-  public $_checkbox;
   public $_idcol;
   public $_loc;
   public $_checked=false;
-  function __construct($echolink=NULL, $checkbox=false) {
-    $this->_echolink = $echolink;
-    $this->_checkbox = $checkbox;
+  function __construct(public $_echolink=NULL, public $_checkbox=false) {
     $this->_cols = [];
     $this->_params = [];
     $this->_loc = new Localize(OBIB_LOCALE,"reports");
