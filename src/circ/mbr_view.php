@@ -80,8 +80,8 @@
   #*  Derzeit abgedeckt durch Missbrauch des Fehlercodes und Markierung mit !!! davor
   #****************************************************************************
   $dueMsg = "";
-  $pgErrors = $_SESSION['pageErrors'];
-  if (str_starts_with($pgErrors[\BARCODENMBR], '!!!')) {
+  $pgErrors = $_SESSION['pageErrors'] ?? '';
+  if ($pgErrors && str_starts_with($pgErrors[\BARCODENMBR], '!!!')) {
 	  $dueMsg = "<font class=\"error\">".substr($pgErrors[\BARCODENMBR], 3)."</font><br><br>";
 	  unset($postVars);
   	  unset($pageErrors);
